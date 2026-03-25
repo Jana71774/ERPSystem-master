@@ -1,15 +1,26 @@
-﻿namespace ERPSystem.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace ERPSystem.Models
 {
-    public class Inventory
-    {
-        public int StockID { get; set; }
-        public string? ItemCode { get; set; }
-        public int AvlQty { get; set; }
-        public int MinQty { get; set; }
-        public int OrderQty { get; set; }
-        public string? Description { get; set; }
-        public string? LoginID { get; set; }
-        public string? LoginName { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-    }
+public class Inventory
+{
+    [Key]
+    public int StockID { get; set; }
+
+    [Required]
+    public string ItemCode { get; set; } = null!; // not nullable
+
+    public int AvlQty { get; set; }
+    public int MinQty { get; set; }
+    public int OrderQty { get; set; }
+    public string? Description { get; set; }
+    public string? LoginID { get; set; }
+    public string? LoginName { get; set; }
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+    // Navigation property
+    [ForeignKey("ItemCode")]
+    public ItemData? ItemData { get; set; }
+}
 }

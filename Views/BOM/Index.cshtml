@@ -18,17 +18,17 @@
 
                     <div class="px-3 py-2 bg-light rounded-3">
                         <small class="text-muted">Product ID</small><br />
-                        <strong>@product.ProductID</strong>
+                        <strong>@product?.ProductID</strong>
                     </div>
 
                     <div class="px-3 py-2 bg-light rounded-3">
                         <small class="text-muted">Product Name</small><br />
-                        <strong>@product.ProdName</strong>
+                        <strong>@product?.ProdName</strong>
                     </div>
 
                     <div class="px-3 py-2 bg-primary bg-opacity-10 rounded-3">
                         <small class="text-muted">Model No</small><br />
-                        <strong class="text-primary">@product.ModelNo</strong>
+                        <strong class="text-primary">@product?.ModelNo</strong>
                     </div>
 
                 </div>
@@ -47,7 +47,7 @@
                 <!-- ADD BOM -->
                 <a asp-controller="BOM"
                    asp-action="Create"
-                   asp-route-productId="@product.ProductID"
+                   asp-route-productId="@product?.ProductID"
                    class="btn btn-primary px-4">
                     Add BOM
                 </a>
@@ -55,8 +55,8 @@
                 <!-- ADD ITEM -->
                 <a asp-controller="ItemData"
                    asp-action="SelectForBOM"
-                   asp-route-productId="@product.ProductID"
-                   asp-route-modelNo="@product.ModelNo"
+                   asp-route-productId="@product?.ProductID"
+                   asp-route-modelNo="@product?.ModelNo"
                    class="btn btn-primary px-4">
                     Add Item
                 </a>

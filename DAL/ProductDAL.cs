@@ -19,6 +19,11 @@ namespace ERPSystem.DAL
             return await _context.Products.ToListAsync();
         }
 
+        public async Task<Product> GetById(string id)
+        {
+            return await _context.Products.FindAsync(id) ?? throw new InvalidOperationException("Product not found");
+        }
+
         public async Task Insert(Product model)
         {
             await _context.Products.AddAsync(model);
@@ -31,7 +36,7 @@ namespace ERPSystem.DAL
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
             var data = await _context.Products.FindAsync(id);
             if (data != null)

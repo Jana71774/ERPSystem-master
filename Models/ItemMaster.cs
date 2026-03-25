@@ -1,12 +1,20 @@
-﻿namespace ERPSystem.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+namespace ERPSystem.Models
 {
-    public class ItemMaster
-    {
-        public string? ItemCode { get; set; }
-        public string? ItemName { get; set; }
-        public string? ItemType { get; set; }
-        public string? ItemDesc { get; set; }
-        public string? CreatedBy { get; set; }
-        public DateTime CreatedOn { get; set; } = DateTime.Now;
-    }
+public class ItemMaster
+{
+    [Key]
+    public string ItemCode { get; set; } = null!;
+
+    [Required]
+    public string ItemName { get; set; } = null!;
+
+    [Required]
+    public string ItemType { get; set; } = null!;
+
+    public string? ItemDesc { get; set; }
+    public string? CreatedBy { get; set; }
+    public DateTime CreatedOn { get; set; } = DateTime.Now;
+}
 }

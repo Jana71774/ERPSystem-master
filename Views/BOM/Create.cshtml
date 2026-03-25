@@ -9,7 +9,7 @@
         <div>
             <h3>➕ Add BOM Item</h3>
             <span style="color:#6b7280">
-                Product: @product.ProdName (@product.ModelNo)
+                Product: @product?.ProdName (@product?.ModelNo)
             </span>
         </div>
 
@@ -27,8 +27,8 @@
         <form asp-action="Create" method="post">
 
             <!-- 🔥 AUTO-FILLED (HIDDEN) -->
-            <input type="hidden" name="ProductID" value="@product.ProductID" />
-            <input type="hidden" name="ModelNo" value="@product.ModelNo" />
+            <input type="hidden" name="ProductID" value="@product?.ProductID" />
+            <input type="hidden" name="ModelNo" value="@product?.ModelNo" />
 
             <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px">
                 <h4 style="margin:0;color:#2563eb">Component Details</h4>

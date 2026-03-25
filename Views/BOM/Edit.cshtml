@@ -10,7 +10,7 @@
         <div>
             <h3>✏ Edit BOM Item</h3>
             <span style="color:#6b7280">
-                Product: @product.ProdName (@product.ModelNo)
+                Product: @product?.ProdName (@product?.ModelNo)
             </span>
         </div>
 
@@ -29,8 +29,8 @@
 
             <!-- KEYS -->
             <input type="hidden" name="BOMID" value="@Model.BOMID" />
-            <input type="hidden" name="ProductID" value="@product.ProductID" />
-            <input type="hidden" name="ModelNo" value="@product.ModelNo" />
+            <input type="hidden" name="ProductID" value="@product?.ProductID" />
+            <input type="hidden" name="ModelNo" value="@product?.ModelNo" />
 
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:22px">
 

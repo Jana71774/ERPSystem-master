@@ -58,15 +58,15 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.itemcode</td>
-                        <td>@item.itemname</td>
+                        <td>@item.ItemCode</td>
+                        <td>@item.ItemName</td>
 
                         <td class="text-end">
 
                             <!-- EDIT -->
                             <a asp-controller="ItemData"
                                asp-action="Edit"
-                               asp-route-id="@item.itemcode"
+                               asp-route-id="@item.ItemCode"
                                class="btn btn-sm btn-outline-primary">
                                 Edit
                             </a>
@@ -74,8 +74,8 @@
                             <!-- SPEC -->
                             <a asp-controller="Spec"
                                asp-action="Index"
-                               asp-route-itemCode="@item.itemcode"
-                               asp-route-itemName="@item.itemname"
+                               asp-route-itemCode="@item.ItemCode"
+                               asp-route-itemName="@item.ItemName"
                                class="btn btn-sm btn-outline-secondary ms-1">
                                 Spec
                             </a>

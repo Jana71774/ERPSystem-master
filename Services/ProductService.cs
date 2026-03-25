@@ -16,10 +16,13 @@ namespace ERPSystem.Services
 
         public async Task<List<Product>> GetAll()
         {
-            var data = await _dal.GetAll();
-            return data.ToList();
+            return (await _dal.GetAll()).ToList();
         }
 
+        public async Task<Product> GetById(string id)
+        {
+            return await _dal.GetById(id);
+        }
 
         public async Task Insert(Product model)
         {
@@ -31,7 +34,7 @@ namespace ERPSystem.Services
             await _dal.Update(model);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string id)
         {
             await _dal.Delete(id);
         }
