@@ -1,0 +1,112 @@
+﻿@model List<ERPSystem.Models.Product>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <!-- Header -->
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Products</h3>
+
+        <div style="display:flex;gap:15px;align-items:center">
+
+            <!-- 🔙 BACK (PREVIOUS PAGE) -->
+            <button type="button"
+                    onclick="goBack();"
+                    style="background:#e5e7eb;color:#111;
+                           padding:6px 14px;border-radius:6px;
+                           border:none;font-weight:600;">
+                ← Back
+            </button>
+
+            <!-- ADD PRODUCT -->
+            <a asp-controller="Product" asp-action="Create"
+               style="color:#2563eb;font-weight:600;text-decoration:none;">
+                + Add Product
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card" style="margin-top:20px;padding:20px">
+
+        <table width="100%" cellpadding="12" cellspacing="0" style="border-collapse:collapse">
+
+            <thead style="background:#f9fafb">
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                    <th>BOM</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr style="border-bottom:1px solid #e5e7eb">
+
+                        <td>@p.ProductID</td>
+                        <td style="font-weight:600">@p.ProdName</td>
+                        <td>@p.Description</td>
+
+                        <!-- Edit -->
+                        <td>
+                            <a asp-controller="Product"
+                               asp-action="Edit"
+                               asp-route-id="@p.ProductID"
+                               style="color:#2563eb;font-weight:600;text-decoration:none;">
+                                Edit
+                            </a>
+                        </td>
+
+                        <!-- BOM -->
+                        <td>
+                            <a asp-controller="BOM"
+                               asp-action="Index"
+                               asp-route-productId="@p.ProductID"
+                               style="color:#10b981;font-weight:600;text-decoration:none;">
+                                BOM
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            // 🔁 fallback (safe default)
+            window.location.href = '/';
+        }
+    }
+</script>
+
+<style>
+    th {
+        text-align: left;
+        font-size: 13px;
+        color: #374151;
+        padding: 10px;
+    }
+
+    td {
+        font-size: 13px;
+        color: #111827;
+        padding: 10px;
+    }
+
+    tr:hover {
+        background: #f9fafb;
+    }
+</style>

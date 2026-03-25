@@ -1,0 +1,78 @@
+﻿@model List<ERPSystem.Models.Inventory>
+
+<div class="main-content">
+
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Inventory</h3>
+
+        <div style="display:flex;gap:12px;align-items:center">
+
+            <!-- 🔙 BACK (PREVIOUS PAGE) -->
+            <button type="button"
+                    onclick="goBack();"
+                    style="background:#e5e7eb;color:#111;
+                           padding:8px 14px;border-radius:6px;
+                           border:none;font-weight:600;">
+                ← Back
+            </button>
+
+            <!-- ✅ ITEM MASTER BUTTON -->
+            <a asp-controller="ItemMaster"
+               asp-action="Index"
+               style="background:#e0ecff;color:#1e40af;
+                      padding:8px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                Item Master
+            </a>
+
+            <!-- ADD STOCK -->
+            <a asp-controller="Inventory"
+               asp-action="Create"
+               style="background:#2a5298;color:white;
+                      padding:8px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                + Add Stock
+            </a>
+
+        </div>
+    </div>
+
+    <table width="100%" cellpadding="12">
+        <tr style="background:#f1f5f9">
+            <th>Item Code</th>
+            <th>Available Qty</th>
+            <th>Min Qty</th>
+            <th>Order Qty</th>
+            <th>Login</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.ItemCode</td>
+                <td>@i.AvlQty</td>
+                <td>@i.MinQty</td>
+                <td>@i.OrderQty</td>
+                <td>@i.LoginName</td>
+                <td>@i.CreatedDate.ToString("dd-MM-yyyy")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@i.ItemCode">Edit</a> 
+                    
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            window.location.href = '/Inventory/Index';
+        }
+    }
+</script>

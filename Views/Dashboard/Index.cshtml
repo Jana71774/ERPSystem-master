@@ -1,0 +1,62 @@
+﻿<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Stimulator Net</h2>
+
+        <a asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+        <a asp-controller="PO" asp-action="Index">Purchase Orders</a>
+        <a asp-controller="Product" asp-action="Index">Product</a>
+        <a asp-controller="Inventory" asp-action="Index">Inventory</a>
+
+        <!-- GRN -->
+        <a asp-controller="GRN" asp-action="Index">GRN Register</a>
+        <a asp-controller="TransSpec" asp-action="Index">TransSpec</a>
+
+        <!-- No direct Spec link (needs StockID) -->
+
+        <a asp-controller="Account" asp-action="Logout">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <div class="topbar">
+            <h3>Dashboard</h3>
+            <span>Welcome, @Context.Session.GetString("LoginId")</span>
+        </div>
+
+        <div class="cards">
+
+            <div class="card" onclick="location.href='/PO/Index'" style="cursor:pointer;">
+                <h3>Purchase Orders</h3>
+                <p>Manage all purchase orders</p>
+            </div>
+
+            <div class="card" onclick="location.href='/Product/Index'" style="cursor:pointer;">
+                <h3>Product</h3>
+                <p>Product master data</p>
+            </div>
+
+            <div class="card" onclick="location.href='/Inventory/Index'" style="cursor:pointer;">
+                <h3>Inventory</h3>
+                <p>Stock and warehouse system</p>
+            </div>
+
+            <div class="card" onclick="location.href='/GRN/Index'" style="cursor:pointer;">
+                <h3>GRN</h3>
+                <p>Goods Receipt Note</p>
+            </div>
+
+            <!-- ✅ FIXED: Variable Specs now routes correctly via Inventory -->
+            <div class="card" onclick="location.href='/TransSpec/Index'" style="cursor:pointer;">
+                <h3>TransSpec</h3>
+                <p>Select Stock in Inventory → Open Specs</p>
+            </div>
+
+        </div>
+
+    </div>
+</div>

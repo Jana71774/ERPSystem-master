@@ -1,0 +1,124 @@
+﻿@model ERPSystem.Models.PO
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <div class="topbar">
+        <h3>➕ Create Purchase Order</h3>
+        <a asp-controller="PO" asp-action="Index"
+           style="text-decoration:none;color:#2a5298;font-weight:600;">
+            ← Back to PO List
+        </a>
+    </div>
+
+    <div class="card" style="max-width:1100px;margin:auto;padding:30px">
+
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+            <!-- Header -->
+            <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px">
+                <h4 style="margin:0;color:#2a5298">Purchase Order Details</h4>
+                <small style="color:#666">Create new purchase order</small>
+            </div>
+
+            <!-- Form Grid -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+                <div>
+                    <label class="form-label">PO No</label>
+                    <input name="PONo" class="form-input" placeholder="Enter PO Number" />
+                </div>
+
+                <div>
+                    <label class="form-label">Customer ID</label>
+                    <input name="Customerid" class="form-input" placeholder="Enter Customer ID" />
+                </div>
+
+                <div>
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="qty" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Product ID</label>
+                    <input name="productid" class="form-input" placeholder="Enter Product ID" />
+                </div>
+
+                <div>
+                    <label class="form-label">Licence Type</label>
+                    <input name="LicenceType" class="form-input" placeholder="Licence Type" />
+                </div>
+
+                <div>
+                    <label class="form-label">Sale Type</label>
+                    <input name="Saletype" class="form-input" placeholder="Sale Type" />
+                </div>
+
+                <div>
+                    <label class="form-label">Salesperson</label>
+                    <input name="Salesperson" class="form-input" placeholder="Salesperson" />
+                </div>
+
+                <div>
+                    <label class="form-label">Warranty (YEAR)</label>
+                    <input type="number" name="WarrantyYEAR" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Attachment</label>
+                    <input type="file" name="AttachmentFile" class="form-input" />
+                </div>
+
+                <div style="grid-column:1/4">
+                    <label class="form-label">Description</label>
+                    <textarea name="Description" class="form-input" rows="3"
+                              placeholder="PO Description"></textarea>
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div style="margin-top:30px;display:flex;justify-content:flex-end;gap:15px">
+
+                <a asp-controller="PO" asp-action="Index"
+                   style="background:#e5e7eb;color:#111;padding:10px 18px;border-radius:6px;
+                          text-decoration:none;font-weight:600;">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        style="background:#2a5298;color:white;padding:12px 24px;border-radius:8px;
+                               border:none;font-weight:600;cursor:pointer;">
+                    💾 Create PO
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+<style>
+    .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        outline: none;
+        font-size: 14px;
+    }
+
+        .form-input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+        }
+</style>

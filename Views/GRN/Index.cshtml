@@ -1,0 +1,55 @@
+﻿@model List<ERPSystem.Models.GRN>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>GRN Register</h3>
+
+        <a asp-action="Create"
+           style="background:#2a5298;color:white;padding:10px 15px;border-radius:6px;text-decoration:none;">
+            + Add GRN
+        </a>
+    </div>
+
+    <div class="card" style="margin-top:20px;padding:20px">
+
+        <table width="100%" cellpadding="12" cellspacing="0" style="border-collapse:collapse">
+            <thead style="background:#f1f5f9">
+                <tr>
+                    <th>GRN ID</th>
+                    <th>Date</th>
+                    <th>Item Code</th>
+                    <th>Qty</th>
+                    <th>Batch</th>
+                    <th>Login</th>
+                    <th>Vendor</th>
+                    <th>ValueQty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var g in Model)
+                {
+                    <tr style="border-bottom:1px solid #e5e7eb">
+                        <td>@g.GRNID</td>
+                        <td>@g.GRNDate.ToString("yyyy-MM-dd")</td>
+                        <td>@g.ItemCode</td>
+                        <td>@g.Qty</td>
+                        <td>@g.BatchCode</td>
+                        <td>@g.LoginID</td>
+                        <td>@g.VendorName</td>
+                        <td>@g.ValueQty</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@g.GRNID"
+                               style="color:#2563eb;font-weight:600;text-decoration:none;">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

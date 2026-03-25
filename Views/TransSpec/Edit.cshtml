@@ -1,0 +1,15 @@
+﻿@model ERPSystem.Models.TransSpecDataModel
+
+<h3>Edit Variable Spec</h3>
+
+<form asp-action="Edit" method="post">
+
+    <input type="hidden" name="StockID" value="@Model.StockID" />
+    <input type="hidden" name="SpecID" value="@Model.SpecID" />
+    <input type="hidden" name="Itemcode" value="@Model.Itemcode" />
+
+    <label>Value</label>
+    <input name="Value" value="@Model.Value" />
+
+    <button type="submit">Update</button>
+</form>

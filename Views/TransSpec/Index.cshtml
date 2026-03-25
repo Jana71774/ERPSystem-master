@@ -1,0 +1,118 @@
+﻿@model List<ERPSystem.Models.TransSpecDataModel>
+
+@{
+    var stockId = ViewBag.StockID;
+    var itemcode = ViewBag.Itemcode;
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+
+        <div>
+            <h3>📋 Variable Specifications</h3>
+            <small style="color:#6b7280">
+                Stock ID: <b>@stockId</b> | Item Code: <b>@itemcode</b>
+            </small>
+        </div>
+
+        <div style="display:flex;gap:12px;align-items:center">
+
+            <!-- 🔙 BACK BUTTON -->
+            <button type="button"
+                    onclick="history.back();"
+                    style="background:#e5e7eb;color:#111;
+                           padding:8px 14px;border-radius:6px;
+                           border:none;font-weight:600;">
+                ← Back
+            </button>
+
+            <!-- ADD SPEC -->
+            <a asp-controller="TransSpec"
+               asp-action="Create"
+               asp-route-stockId="@stockId"
+               asp-route-itemcode="@itemcode"
+               style="background:#2563eb;color:white;
+                      padding:8px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                + Add Spec
+            </a>
+
+        </div>
+    </div>
+
+    <!-- CARD -->
+    <div class="card" style="margin-top:20px;padding:20px">
+
+        <table class="trans-table">
+            <thead>
+                <tr>
+                    <th>Spec ID</th>
+                    <th>Value</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var s in Model)
+                {
+                    <tr>
+                        <td>@s.SpecID</td>
+                        <td>@s.Value</td>
+                        <td>
+                            <a asp-controller="TransSpec"
+                               asp-action="Edit"
+                               asp-route-stockId="@s.StockID"
+                               asp-route-specid="@s.SpecID"
+                               asp-route-itemcode="@s.Itemcode"
+                               class="edit-link">
+                                ✏ Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<style>
+    .trans-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .trans-table th {
+            text-align: left;
+            font-size: 12px;
+            color: #6b7280;
+            padding: 12px;
+            background: #f9fafb;
+        }
+
+        .trans-table td {
+            padding: 14px 12px;
+            font-size: 13px;
+            color: #111827;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .trans-table tr:hover {
+            background: #f9fafb;
+        }
+
+    .edit-link {
+        color: #2563eb;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+</style>

@@ -1,0 +1,69 @@
+﻿@model List<ERPSystem.Models.Salesperson>
+
+<div class="main-content">
+
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Salespersons</h3>
+
+        <div style="display:flex;gap:12px;align-items:center">
+
+            <!-- 🔙 BACK (PREVIOUS PAGE) -->
+            <button type="button"
+                    onclick="goBack();"
+                    style="background:#e5e7eb;color:#111;
+                           padding:8px 14px;border-radius:6px;
+                           border:none;font-weight:600;">
+                ← Back
+            </button>
+
+            <!-- ➕ ADD SALESPERSON -->
+            <a asp-controller="Salesperson"
+               asp-action="Create"
+               style="background:#2a5298;color:white;
+                      padding:8px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                + Add Salesperson
+            </a>
+
+        </div>
+    </div>
+
+    <table width="100%" cellpadding="12">
+        <tr style="background:#f1f5f9">
+            <th>Emp ID</th>
+            <th>Name</th>
+            <th>Region</th>
+            <th>Target</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.EmpID</td>
+                <td>@s.Name</td>
+                <td>@s.Region</td>
+                <td>@s.Target</td>
+                <td>
+                    <a asp-controller="Salesperson"
+                       asp-action="Edit"
+                       asp-route-id="@s.EmpID">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            // 🔁 safe fallback
+            window.location.href = '/';
+        }
+    }
+</script>

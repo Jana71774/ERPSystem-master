@@ -1,0 +1,814 @@
+CREATION OF DATABASE:
+
+CREATE DATABASE OrderDB;
+GO
+
+USE OrderDB;
+GO
+
+CREATION OF TABLES:
+
+1) tbllogin                                 #LoginId: admin
+                                            #Password: 123
+
+
+CREATE TABLE tblLogin (
+    [LoginId]      VARCHAR (50)  NOT NULL,
+    [PasswordHash] VARCHAR (255) NOT NULL,
+    [Role]         VARCHAR (50)  NULL,
+    [IsActive]     BIT           DEFAULT ((1)) NULL,
+    [CreatedDate]  DATETIME      DEFAULT (getdate()) NULL,
+    PRIMARY KEY CLUSTERED ([LoginId] ASC)
+);
+
+2) tblPO
+
+CREATE TABLE tblPO (
+    [OrderID]      INT           IDENTITY (1, 1) NOT NULL,
+    [PONo]         VARCHAR (50)  NULL,
+    [Customerid]   VARCHAR (50)  NULL,
+    [qty]          INT           NULL,
+    [productid]    VARCHAR (50)  NULL,
+    [Description]  VARCHAR (200) NULL,
+    [LicenceType]  VARCHAR (50)  NULL,
+    [Saletype]     VARCHAR (50)  NULL,
+    [Salesperson]  VARCHAR (50)  NULL,
+    [WarrantyYEAR] INT           NULL,
+    [Attachment]   VARCHAR (300) NULL,
+    PRIMARY KEY CLUSTERED ([OrderID] ASC)
+);
+
+3) tblCustomer
+
+CREATE TABLE tblCustomer (
+    [CustomerID]    VARCHAR (50)  NOT NULL,
+    [Address]       VARCHAR (200) NULL,
+    [Region]        VARCHAR (50)  NULL,
+    [Email]         VARCHAR (100) NULL,
+    [ContactPerson] VARCHAR (100) NULL,
+    [PhoneNo]       VARCHAR (20)  NULL,
+    [CreatedDate]   DATETIME      DEFAULT (getdate()) NULL,
+    PRIMARY KEY CLUSTERED ([CustomerID] ASC)
+);
+
+4) tblSalesPerson
+
+CREATE TABLE tblSalesperson (
+    [EmpID]  VARCHAR (50)  NOT NULL,
+    [Name]   VARCHAR (100) NULL,
+    [Region] VARCHAR (100) NULL,
+    [Target] INT           NULL,
+    PRIMARY KEY CLUSTERED ([EmpID] ASC)
+);
+
+5) tblProduct
+
+CREATE TABLE tblProduct (
+    [ProductID]   VARCHAR (50)  NOT NULL,
+    [ProdName]    VARCHAR (150) NULL,
+    [ModelNo]     VARCHAR (100) NULL,
+    [ModelName]   VARCHAR (150) NULL,
+    [Description] VARCHAR (300) NULL,
+    PRIMARY KEY CLUSTERED ([ProductID] ASC)
+);
+
+6) tblBOM
+
+CREATE TABLE tblBOM (
+    [BOMID]       INT           IDENTITY (1, 1) NOT NULL,
+    [ProductID]   VARCHAR (50)  NULL,
+    [ModelNo]     VARCHAR (100) NULL,
+    [Description] VARCHAR (200) NULL,
+    [ItemCode]    VARCHAR (50)  NULL,
+    [ItemName]    VARCHAR (100) NULL,
+    [Qty]         INT           NULL,
+    PRIMARY KEY CLUSTERED ([BOMID] ASC)
+);
+
+7) tblSpec
+
+CREATE TABLE tblSpec (
+    [ItemCode]  VARCHAR (20)  NOT NULL,
+    [ItemName]  VARCHAR (100) NULL,
+    [SpecId]    VARCHAR (20)  NOT NULL,
+    [SpecData]  VARCHAR (100) NULL,
+    [SpecValue] VARCHAR (100) NULL,
+    CONSTRAINT [PK_tblSpec] PRIMARY KEY CLUSTERED ([ItemCode] ASC, [SpecId] ASC)
+);
+
+8) tblInventory
+
+CREATE TABLE tblInventory (
+    [ItemCode]    VARCHAR (50)  NOT NULL,
+    [AvlQty]      INT           NOT NULL,
+    [MinQty]      INT           NOT NULL,
+    [OrderQty]    INT           NOT NULL,
+    [Description] VARCHAR (255) NULL,
+    [LoginID]     VARCHAR (50)  NULL,
+    [LoginName]   VARCHAR (100) NULL,
+    [CreatedDate] DATETIME      DEFAULT (getdate()) NULL,
+    [StockID]     INT           IDENTITY (1, 1) NOT NULL,
+    CONSTRAINT [PK_tblInventory] PRIMARY KEY CLUSTERED ([StockID] ASC, [ItemCode] ASC),
+    CONSTRAINT [FK_tblInventory_Item] FOREIGN KEY ([ItemCode]) REFERENCES [dbo].[tblItemData] ([itemcode])
+);
+
+9) tblItemMaster
+
+CREATE TABLE tblItemMaster (
+    [ItemCode]  VARCHAR (50)  NOT NULL,
+    [ItemName]  VARCHAR (150) NOT NULL,
+    [ItemType]  VARCHAR (20)  NOT NULL,
+    [ItemDesc]  VARCHAR (255) NULL,
+    [CreatedBy] VARCHAR (50)  NULL,
+    [CreatedOn] DATETIME      DEFAULT (getdate()) NULL,
+    CONSTRAINT [PK_tblItemMaster] PRIMARY KEY CLUSTERED ([ItemCode] ASC)
+);
+
+10) transGRN
+
+CREATE TABLE transGRN (
+    [GRNID]      INT             IDENTITY (1, 1) NOT NULL,
+    [GRNDate]    DATE            NOT NULL,
+    [ItemCode]   VARCHAR (50)    NOT NULL,
+    [Qty]        DECIMAL (18, 2) NOT NULL,
+    [BatchCode]  VARCHAR (50)    NULL,
+    [LoginID]    VARCHAR (50)    NULL,
+    [VendorName] VARCHAR (100)   NULL,
+    [ValueQty]   DECIMAL (18, 2) NULL,
+    PRIMARY KEY CLUSTERED ([GRNID] ASC)
+);
+
+11) tblItemData
+
+CREATE TABLE tblItemData (
+    [itemcode] VARCHAR (50)  NOT NULL,
+    [itemname] VARCHAR (100) NOT NULL,
+    [itemdata] VARCHAR (255) NULL,
+    [SpecID]   VARCHAR (50)  NULL,
+    [SpecData] VARCHAR (255) NULL,
+    CONSTRAINT [PK_tblItemData] PRIMARY KEY CLUSTERED ([itemcode] ASC)
+);
+
+
+STORED PROCEDURES:
+
+tbllogin:
+
+1.1) sp_LoginUser
+CREATE PROCEDURE sp_LoginUser
+    @LoginId VARCHAR(50),
+    @Password VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT LoginId, Role
+    FROM tblLogin
+    WHERE LoginId = @LoginId
+      AND PasswordHash = @Password
+      AND IsActive = 1
+END
+
+2) tblPO:
+
+2.1) sp_InsertPO
+CREATE PROCEDURE sp_InsertPO
+    @PONo VARCHAR(50),
+    @Customerid VARCHAR(50),
+    @qty INT,
+    @productid VARCHAR(50),
+    @Description VARCHAR(200),
+    @LicenceType VARCHAR(50),
+    @Saletype VARCHAR(50),
+    @Salesperson VARCHAR(50),
+    @WarrantyYEAR INT,
+    @Attachment VARCHAR(300)
+AS
+BEGIN
+    INSERT INTO tblPO
+    (PONo,Customerid,qty,productid,Description,LicenceType,Saletype,Salesperson,WarrantyYEAR,Attachment)
+    VALUES
+    (@PONo,@Customerid,@qty,@productid,@Description,@LicenceType,@Saletype,@Salesperson,@WarrantyYEAR,@Attachment)
+
+    SELECT SCOPE_IDENTITY() AS OrderID
+END
+
+2.2) sp_UpdatePO
+CREATE PROCEDURE sp_UpdatePO
+    @OrderID INT,
+    @PONo VARCHAR(50),
+    @Customerid VARCHAR(50),
+    @qty INT,
+    @productid VARCHAR(50),
+    @Description VARCHAR(200),
+    @LicenceType VARCHAR(50),
+    @Saletype VARCHAR(50),
+    @Salesperson VARCHAR(50),
+    @WarrantyYEAR INT,
+    @Attachment VARCHAR(300)
+AS
+BEGIN
+    UPDATE tblPO SET
+        PONo=@PONo,
+        Customerid=@Customerid,
+        qty=@qty,
+        productid=@productid,
+        Description=@Description,
+        LicenceType=@LicenceType,
+        Saletype=@Saletype,
+        Salesperson=@Salesperson,
+        WarrantyYEAR=@WarrantyYEAR,
+        Attachment=@Attachment
+    WHERE OrderID=@OrderID
+END
+
+2.3) sp_GetAllPO
+CREATE PROCEDURE sp_GetAllPO
+AS
+BEGIN
+    SELECT * FROM tblPO
+END
+
+2.4) sp_GetPOById
+CREATE PROCEDURE sp_GetPOById
+    @OrderID INT
+AS
+BEGIN
+    SELECT * FROM tblPO WHERE OrderID=@OrderID
+END
+
+
+3) tblCustomer:
+
+3.1) sp_InsertCustomer
+CREATE PROCEDURE sp_InsertCustomer
+    @CustomerID VARCHAR(50),
+    @Address VARCHAR(200),
+    @Region VARCHAR(50),
+    @Email VARCHAR(100),
+    @ContactPerson VARCHAR(100),
+    @PhoneNo VARCHAR(20)
+AS
+BEGIN
+    INSERT INTO tblCustomer
+    VALUES(@CustomerID,@Address,@Region,@Email,@ContactPerson,@PhoneNo,GETDATE())
+END
+
+3.2) sp_GetAllCustomers
+CREATE PROCEDURE sp_GetAllCustomers
+AS
+BEGIN
+    SELECT * FROM tblCustomer ORDER BY CreatedDate DESC
+END
+
+3.3) sp_GetCustomerById
+CREATE PROCEDURE sp_GetCustomerById
+    @CustomerID VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM tblCustomer WHERE CustomerID = @CustomerID
+END
+
+3.4) sp_UpdateCustomer
+CREATE PROCEDURE sp_UpdateCustomer
+    @CustomerID VARCHAR(50),
+    @Address VARCHAR(200),
+    @Region VARCHAR(50),
+    @Email VARCHAR(100),
+    @ContactPerson VARCHAR(100),
+    @PhoneNo VARCHAR(20)
+AS
+BEGIN
+    UPDATE tblCustomer SET
+        Address=@Address,
+        Region=@Region,
+        Email=@Email,
+        ContactPerson=@ContactPerson,
+        PhoneNo=@PhoneNo
+    WHERE CustomerID=@CustomerID
+END
+
+4) tblSalesperson:
+
+4.1) sp_InsertSalesperson
+CREATE PROCEDURE sp_InsertSalesperson
+    @EmpID VARCHAR(50),
+    @Name VARCHAR(100),
+    @Region VARCHAR(100),
+    @Target INT
+AS
+BEGIN
+    INSERT INTO tblSalesperson(EmpID,Name,Region,Target)
+    VALUES(@EmpID,@Name,@Region,@Target)
+END
+
+4.2) sp_GetAllSalesperson
+CREATE PROCEDURE sp_GetAllSalesperson
+AS
+BEGIN
+    SELECT * FROM tblSalesperson
+END
+
+4.3) sp_GetSalespersonById
+CREATE PROCEDURE sp_GetSalespersonById
+    @EmpID VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM tblSalesperson WHERE EmpID=@EmpID
+END
+
+4.4) sp_UpdateSalesperson
+CREATE PROCEDURE sp_UpdateSalesperson
+    @EmpID VARCHAR(50),
+    @Name VARCHAR(100),
+    @Region VARCHAR(100),
+    @Target INT
+AS
+BEGIN
+    UPDATE tblSalesperson
+    SET Name=@Name,
+        Region=@Region,
+        Target=@Target
+    WHERE EmpID=@EmpID
+END
+
+5) tblProduct:
+
+5.1) sp_InsertProduct
+CREATE PROCEDURE sp_InsertProduct
+    @ProductID VARCHAR(50),
+    @ProdName VARCHAR(150),
+    @ModelNo VARCHAR(100),
+    @ModelName VARCHAR(150),
+    @Description VARCHAR(300)
+AS
+BEGIN
+    INSERT INTO tblProduct(ProductID,ProdName,ModelNo,ModelName,Description)
+    VALUES(@ProductID,@ProdName,@ModelNo,@ModelName,@Description)
+END
+
+5.2) sp_GetAllProduct
+CREATE PROCEDURE sp_GetAllProduct
+AS
+BEGIN
+    SELECT * FROM tblProduct
+END
+
+5.3) sp_GetProductById
+CREATE PROCEDURE sp_GetProductById
+    @ProductID VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM tblProduct WHERE ProductID=@ProductID
+END
+
+5.4) sp_UpdateProduct
+CREATE PROCEDURE sp_UpdateProduct
+    @ProductID VARCHAR(50),
+    @ProdName VARCHAR(150),
+    @ModelNo VARCHAR(100),
+    @ModelName VARCHAR(150),
+    @Description VARCHAR(300)
+AS
+BEGIN
+    UPDATE tblProduct SET
+        ProdName=@ProdName,
+        ModelNo=@ModelNo,
+        ModelName=@ModelName,
+        Description=@Description
+    WHERE ProductID=@ProductID
+END
+
+6) tblItemData:
+
+6.1) sp_InsertItemdata
+CREATE PROCEDURE sp_InsertItemdata
+    @itemcode VARCHAR(50),
+    @itemname VARCHAR(100),
+    @itemdata VARCHAR(255) = NULL,
+    @SpecID VARCHAR(50) = NULL,
+    @SpecData VARCHAR(255) = NULL
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM tblItemData WHERE itemcode = @itemcode)
+    BEGIN
+        UPDATE tblItemData
+        SET 
+            itemname = @itemname,
+            itemdata = @itemdata,
+            SpecID = @SpecID,
+            SpecData = @SpecData
+        WHERE itemcode = @itemcode;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO tblItemData
+        VALUES (@itemcode, @itemname, @itemdata, @SpecID, @SpecData);
+    END
+END
+
+6.2) sp_GetAllItemdata
+CREATE   PROCEDURE sp_GetAllItemdata
+AS
+BEGIN
+    SELECT itemcode, itemname, itemdata, SpecID, SpecData
+    FROM tblItemdata
+END
+
+6.3) sp_GetItemdataByCode
+CREATE PROCEDURE sp_GetItemdataByCode
+    @itemcode VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM tblItemdata WHERE itemcode=@itemcode
+END
+
+6.4) sp_UpdateItemdata
+CREATE PROCEDURE sp_UpdateItemdata
+    @itemcode VARCHAR(50),
+    @itemname VARCHAR(100),
+    @itemdata VARCHAR(255) = NULL,
+    @SpecID VARCHAR(50) = NULL,
+    @SpecData VARCHAR(255) = NULL
+AS
+BEGIN
+    UPDATE tblItemData
+    SET 
+        itemname = @itemname,
+        itemdata = @itemdata,
+        SpecID = @SpecID,
+        SpecData = @SpecData
+    WHERE itemcode = @itemcode;
+END
+
+7) tblBOM:
+
+7.1) sp_InsertBOM
+CREATE PROCEDURE sp_InsertBOM
+    @ProductID VARCHAR(50),
+    @ModelNo VARCHAR(100),
+    @Description VARCHAR(200),
+    @ItemCode VARCHAR(50),
+    @ItemName VARCHAR(100),
+    @Qty INT
+AS
+BEGIN
+    INSERT INTO tblBOM(ProductID,ModelNo,Description,ItemCode,ItemName,Qty)
+    VALUES(@ProductID,@ModelNo,@Description,@ItemCode,@ItemName,@Qty)
+END
+
+7.2) sp_GetBOMByProduct
+CREATE PROCEDURE sp_GetBOMByProduct
+    @ProductID VARCHAR(50)
+AS
+BEGIN
+    SELECT * FROM tblBOM WHERE ProductID=@ProductID
+END
+
+7.3) sp_GetBOMById
+CREATE PROCEDURE sp_GetBOMById
+    @BOMID INT
+AS
+BEGIN
+    SELECT * FROM tblBOM WHERE BOMID=@BOMID
+END
+
+7.4) sp_UpdateBOM
+CREATE PROCEDURE sp_UpdateBOM
+    @BOMID INT,
+    @ProductID VARCHAR(50),
+    @ModelNo VARCHAR(100),
+    @Description VARCHAR(200),
+    @ItemCode VARCHAR(50),
+    @ItemName VARCHAR(100),
+    @Qty INT
+AS
+BEGIN
+    UPDATE tblBOM SET
+        ProductID=@ProductID,
+        ModelNo=@ModelNo,
+        Description=@Description,
+        ItemCode=@ItemCode,
+        ItemName=@ItemName,
+        Qty=@Qty
+    WHERE BOMID=@BOMID
+END
+
+8) tblSpec:
+
+8.1) sp_tblSpec_Insert
+CREATE PROCEDURE sp_tblSpec_Insert
+    @ItemCode  VARCHAR(20),
+    @ItemName  VARCHAR(100),
+    @SpecId    VARCHAR(20),
+    @SpecData  VARCHAR(100),
+    @SpecValue VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO tblSpec
+    (
+        ItemCode,
+        ItemName,
+        SpecId,
+        SpecData,
+        SpecValue
+    )
+    VALUES
+    (
+        @ItemCode,
+        @ItemName,
+        @SpecId,
+        @SpecData,
+        @SpecValue
+    );
+END;
+
+8.2) sp_tblSpec_GetByItemCode
+CREATE PROCEDURE sp_tblSpec_GetByItemCode
+    @ItemCode VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        ItemCode,
+        ItemName,
+        SpecId,
+        SpecData,
+        SpecValue
+    FROM tblSpec
+    WHERE ItemCode = @ItemCode
+    ORDER BY SpecId;
+END;
+
+8.3) sp_tblSpec_GetById
+CREATE PROCEDURE sp_tblSpec_GetById
+    @ItemCode VARCHAR(20),
+    @SpecId   VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    SELECT
+        ItemCode,
+        ItemName,
+        SpecId,
+        SpecData,
+        SpecValue
+    FROM tblSpec
+    WHERE ItemCode = @ItemCode
+      AND SpecId   = @SpecId;
+END;
+
+8.4) sp_tblSpec_Update
+CREATE PROCEDURE sp_tblSpec_Update
+    @ItemCode  VARCHAR(20),
+    @SpecId    VARCHAR(20),
+    @SpecData  VARCHAR(100),
+    @SpecValue VARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE tblSpec
+    SET
+        SpecData  = @SpecData,
+        SpecValue = @SpecValue
+    WHERE ItemCode = @ItemCode
+      AND SpecId   = @SpecId;
+END;
+
+9) tblInventory:
+
+9.1) sp_InsertInventory
+CREATE PROCEDURE sp_InsertInventory
+    @ItemCode    VARCHAR(50),
+    @AvlQty      INT,
+    @MinQty      INT,
+    @OrderQty    INT,
+    @Description VARCHAR(255) = NULL,
+    @LoginID     VARCHAR(50) = NULL,
+    @LoginName   VARCHAR(100) = NULL
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM tblInventory WHERE ItemCode = @ItemCode)
+    BEGIN
+        UPDATE tblInventory
+        SET 
+            AvlQty = @AvlQty,
+            MinQty = @MinQty,
+            OrderQty = @OrderQty,
+            Description = @Description,
+            LoginID = @LoginID,
+            LoginName = @LoginName,
+            CreatedDate = GETDATE()
+        WHERE ItemCode = @ItemCode;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO tblInventory
+        (ItemCode, AvlQty, MinQty, OrderQty, Description, LoginID, LoginName)
+        VALUES
+        (@ItemCode, @AvlQty, @MinQty, @OrderQty, @Description, @LoginID, @LoginName);
+    END
+END
+
+9.2) sp_GetAllInventory
+CREATE PROCEDURE sp_GetAllInventory
+AS
+BEGIN
+    SELECT * FROM tblInventory;
+END
+
+9.3) sp_GetInventoryByItem
+CREATE PROCEDURE sp_GetInventoryByItem
+    @ItemCode VARCHAR(50)
+AS
+BEGIN
+    SELECT * 
+    FROM tblInventory
+    WHERE ItemCode = @ItemCode;
+END
+
+9.4) sp_UpdateInventory
+CREATE PROCEDURE sp_UpdateInventory
+    @ItemCode    VARCHAR(50),
+    @AvlQty      INT,
+    @MinQty      INT,
+    @OrderQty    INT,
+    @Description VARCHAR(255) = NULL,
+    @LoginID     VARCHAR(50) = NULL,
+    @LoginName   VARCHAR(100) = NULL
+AS
+BEGIN
+    UPDATE tblInventory
+    SET 
+        AvlQty = @AvlQty,
+        MinQty = @MinQty,
+        OrderQty = @OrderQty,
+        Description = @Description,
+        LoginID = @LoginID,
+        LoginName = @LoginName,
+        CreatedDate = GETDATE()
+    WHERE ItemCode = @ItemCode;
+END
+
+10) tblItemMaster:
+
+10.1) sp_InsertItemMaster
+CREATE PROCEDURE sp_InsertItemMaster
+    @ItemCode  VARCHAR(50),
+    @ItemName  VARCHAR(150),
+    @ItemType  VARCHAR(20),
+    @ItemDesc  VARCHAR(255) = NULL,
+    @CreatedBy VARCHAR(50) = NULL
+AS
+BEGIN
+    IF EXISTS (SELECT 1 FROM tblItemMaster WHERE ItemCode = @ItemCode)
+    BEGIN
+        UPDATE tblItemMaster
+        SET 
+            ItemName = @ItemName,
+            ItemType = @ItemType,
+            ItemDesc = @ItemDesc,
+            CreatedBy = @CreatedBy,
+            CreatedOn = GETDATE()
+        WHERE ItemCode = @ItemCode;
+    END
+    ELSE
+    BEGIN
+        INSERT INTO tblItemMaster
+        (ItemCode, ItemName, ItemType, ItemDesc, CreatedBy)
+        VALUES
+        (@ItemCode, @ItemName, @ItemType, @ItemDesc, @CreatedBy);
+    END
+END
+
+10.2) sp_GetAllItemMaster
+CREATE PROCEDURE sp_GetAllItemMaster
+AS
+BEGIN
+    SELECT * FROM tblItemMaster;
+END
+
+10.3) sp_GetItemMasterByCode
+CREATE PROCEDURE sp_GetItemMasterByCode
+    @ItemCode VARCHAR(50)
+AS
+BEGIN
+    SELECT * 
+    FROM tblItemMaster
+    WHERE ItemCode = @ItemCode;
+END
+
+10.4) sp_UpdateItemMaster
+CREATE PROCEDURE sp_UpdateItemMaster
+    @ItemCode  VARCHAR(50),
+    @ItemName  VARCHAR(150),
+    @ItemType  VARCHAR(20),
+    @ItemDesc  VARCHAR(255) = NULL,
+    @CreatedBy VARCHAR(50) = NULL
+AS
+BEGIN
+    UPDATE tblItemMaster
+    SET 
+        ItemName = @ItemName,
+        ItemType = @ItemType,
+        ItemDesc = @ItemDesc,
+        CreatedBy = @CreatedBy,
+        CreatedOn = GETDATE()
+    WHERE ItemCode = @ItemCode;
+END
+
+11) TransGRN:
+
+11.1) sp_InsertGRN
+CREATE   PROCEDURE sp_InsertGRN
+    @GRNDate DATE,
+    @ItemCode VARCHAR(50),
+    @Qty DECIMAL(18,2),
+    @BatchCode VARCHAR(50),
+    @LoginID VARCHAR(50),
+    @VendorName VARCHAR(100),
+    @ValueQty DECIMAL(18,2)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+
+    -- 1️⃣ Insert into GRN transaction table
+    INSERT INTO transGRN
+    (GRNDate, ItemCode, Qty, BatchCode, LoginID, VendorName, ValueQty)
+    VALUES
+    (@GRNDate, @ItemCode, @Qty, @BatchCode, @LoginID, @VendorName, @ValueQty);
+
+    -- 2️⃣ Update Inventory (Increase AvlQty)
+    IF EXISTS (SELECT 1 FROM tblInventory WHERE itemcode = @ItemCode)
+    BEGIN
+        UPDATE tblInventory
+        SET AvlQty = AvlQty + @Qty
+        WHERE itemcode = @ItemCode;
+    END
+    ELSE
+    BEGIN
+        -- If item is not yet in inventory, create it
+        INSERT INTO tblInventory (itemcode, AvlQty, minQty, OrderQty, Description)
+        VALUES (@ItemCode, @Qty, 0, 0, '');
+    END
+
+    COMMIT TRANSACTION;
+END;
+
+10.2) sp_GetAllGRN
+CREATE PROCEDURE sp_GetAllGRN
+AS
+BEGIN
+    SELECT * FROM transGRN ORDER BY GRNID DESC;
+END;
+
+10.3) sp_GetGRNById
+CREATE PROCEDURE sp_GetGRNById
+    @GRNID INT
+AS
+BEGIN
+    SELECT * FROM transGRN WHERE GRNID = @GRNID;
+END;
+
+10.4) sp_UpdateGRN
+CREATE PROCEDURE sp_UpdateGRN
+    @GRNID INT,
+    @GRNDate DATE,
+    @ItemCode VARCHAR(50),
+    @Qty DECIMAL(18,2),
+    @BatchCode VARCHAR(50),
+    @LoginID VARCHAR(50),
+    @VendorName VARCHAR(100),
+    @ValueQty DECIMAL(18,2)
+AS
+BEGIN
+    UPDATE transGRN
+    SET GRNDate=@GRNDate,
+        ItemCode=@ItemCode,
+        Qty=@Qty,
+        BatchCode=@BatchCode,
+        LoginID=@LoginID,
+        VendorName=@VendorName,
+        ValueQty=@ValueQty
+    WHERE GRNID=@GRNID;
+
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+

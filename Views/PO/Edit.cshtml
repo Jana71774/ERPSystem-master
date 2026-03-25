@@ -1,0 +1,119 @@
+﻿@model ERPSystem.Models.PO
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <div class="topbar">
+        <h3>✏ Edit Purchase Order</h3>
+        <a asp-controller="PO" asp-action="Index"
+           style="text-decoration:none;color:#2a5298;font-weight:600;">
+            ← Back to PO List
+        </a>
+    </div>
+
+    <div class="card" style="max-width:1100px;margin:auto;padding:30px">
+
+        <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+            <!-- Hidden Auto PK -->
+            <input type="hidden" name="OrderID" value="@Model.OrderID" />
+
+            <!-- Header -->
+            <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px;
+                        display:flex;justify-content:space-between;align-items:center">
+
+                <div>
+                    <h4 style="margin:0;color:#2a5298">Purchase Order Details</h4>
+                    <small style="color:#666">Update purchase order</small>
+                </div>
+
+                <div>
+                    <label style="font-size:12px;color:#666">Order ID (System)</label>
+                    <input value="@Model.OrderID" readonly
+                           style="background:#e5e7eb;font-weight:bold;text-align:center;width:160px" />
+                </div>
+            </div>
+
+            <!-- Form Grid -->
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+
+                <div>
+                    <label class="form-label">PO No</label>
+                    <input name="PONo" value="@Model.PONo" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Customer ID</label>
+                    <input name="Customerid" value="@Model.Customerid" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Quantity</label>
+                    <input type="number" name="qty" value="@Model.qty" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Product ID</label>
+                    <input name="productid" value="@Model.productid" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Licence Type</label>
+                    <input name="LicenceType" value="@Model.LicenceType" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Sale Type</label>
+                    <input name="Saletype" value="@Model.Saletype" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Salesperson</label>
+                    <input name="Salesperson" value="@Model.Salesperson" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Warranty (YEAR)</label>
+                    <input type="number" name="WarrantyYEAR" value="@Model.WarrantyYEAR" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Attachment</label>
+                    <input type="file" name="AttachmentFile" class="form-input" />
+                    @if (!string.IsNullOrEmpty(Model.Attachment))
+                    {
+                        <small>
+                            Current:
+                            <a href="@Model.Attachment" target="_blank">View File</a>
+                        </small>
+                    }
+                </div>
+
+                <div style="grid-column:1/4">
+                    <label class="form-label">Description</label>
+                    <textarea name="Description" class="form-input" rows="3">@Model.Description</textarea>
+                </div>
+
+            </div>
+
+            <!-- Buttons -->
+            <div style="margin-top:30px;display:flex;justify-content:flex-end;gap:15px">
+
+                <a asp-controller="PO" asp-action="Index"
+                   style="background:#e5e7eb;color:#111;padding:10px 18px;border-radius:6px;
+                          text-decoration:none;font-weight:600;">
+                    Cancel
+                </a>
+
+                <button type="submit"
+                        style="background:#2a5298;color:white;padding:12px 24px;border-radius:8px;
+                               border:none;font-weight:600;cursor:pointer;">
+                    💾 Update PO
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>

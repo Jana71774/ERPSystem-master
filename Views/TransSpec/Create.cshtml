@@ -1,0 +1,17 @@
+﻿@model ERPSystem.Models.TransSpecDataModel
+
+<h3>Add Variable Spec</h3>
+
+<form asp-action="Create" method="post">
+
+    <input type="hidden" name="StockID" value="@ViewBag.StockID" />
+    <input type="hidden" name="Itemcode" value="@ViewBag.Itemcode" />
+
+    <label>SpecID</label>
+    <input name="SpecID" required />
+
+    <label>Value</label>
+    <input name="Value" />
+
+    <button type="submit">Save</button>
+</form>

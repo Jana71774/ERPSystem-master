@@ -1,0 +1,123 @@
+﻿@model ERPSystem.Models.Inventory
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>➕ Add Inventory</h3>
+
+        <!-- 🔙 BACK -->
+        <button type="button"
+                onclick="goBack();"
+                style="background:none;border:none;color:#2a5298;
+                       font-weight:600;cursor:pointer;">
+            ← Back
+        </button>
+    </div>
+
+    <!-- CARD -->
+    <div class="card" style="max-width:900px;margin:auto;padding:30px">
+
+        <form asp-action="Create" method="post">
+
+            <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px">
+                <h4 style="margin:0;color:#2a5298">Inventory Details</h4>
+                <small style="color:#666">Add new stock record</small>
+            </div>
+
+            <!-- FORM GRID -->
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:22px">
+
+                <div>
+                    <label class="form-label">Item Code</label>
+                    <input name="ItemCode" class="form-input" required />
+                </div>
+
+                <div>
+                    <label class="form-label">Available Qty</label>
+                    <input type="number" name="AvlQty" class="form-input" required />
+                </div>
+
+                <div>
+                    <label class="form-label">Minimum Qty</label>
+                    <input type="number" name="MinQty" class="form-input" required />
+                </div>
+
+                <div>
+                    <label class="form-label">Order Qty</label>
+                    <input type="number" name="OrderQty" class="form-input" required />
+                </div>
+
+                <div>
+                    <label class="form-label">Login ID</label>
+                    <input name="LoginID" class="form-input" />
+                </div>
+
+                <div>
+                    <label class="form-label">Login Name</label>
+                    <input name="LoginName" class="form-input" />
+                </div>
+
+                <div style="grid-column:1/3">
+                    <label class="form-label">Description</label>
+                    <textarea name="Description" class="form-input"></textarea>
+                </div>
+
+            </div>
+
+            <!-- BUTTONS -->
+            <div style="margin-top:30px;display:flex;justify-content:flex-end;gap:15px">
+
+                <button type="button"
+                        onclick="goBack();"
+                        style="background:#e5e7eb;color:#111;padding:10px 18px;
+                               border-radius:6px;border:none;font-weight:600;">
+                    Cancel
+                </button>
+
+                <button type="submit"
+                        style="background:#2a5298;color:white;padding:12px 22px;
+                               border-radius:8px;border:none;font-weight:600;">
+                    💾 Save Inventory
+                </button>
+
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            window.location.href = '/Inventory/Index';
+        }
+    }
+</script>
+
+<style>
+    .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        outline: none;
+        font-size: 14px;
+    }
+
+        .form-input:focus {
+            border-color: #2a5298;
+            box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+        }
+</style>

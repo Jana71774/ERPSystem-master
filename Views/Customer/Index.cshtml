@@ -1,0 +1,74 @@
+﻿@model List<ERPSystem.Models.Customer>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Customers</h3>
+
+        <div style="display:flex;gap:12px;align-items:center">
+
+            <!-- 🔙 BACK (PREVIOUS PAGE) -->
+            <button type="button"
+                    onclick="goBack();"
+                    style="background:#e5e7eb;color:#111;
+                           padding:8px 14px;border-radius:6px;
+                           border:none;font-weight:600;">
+                ← Back
+            </button>
+
+            <!-- ➕ ADD CUSTOMER -->
+            <a asp-controller="Customer" asp-action="Create"
+               style="background:#2a5298;color:white;
+                      padding:10px 15px;border-radius:6px;
+                      text-decoration:none;">
+                + Add Customer
+            </a>
+
+        </div>
+    </div>
+
+    <div class="card">
+
+        <table width="100%" cellpadding="12">
+            <tr style="background:#f1f5f9">
+                <th>ID</th>
+                <th>Contact Person</th>
+                <th>Region</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Action</th>
+            </tr>
+
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.CustomerID</td>
+                    <td>@c.ContactPerson</td>
+                    <td>@c.Region</td>
+                    <td>@c.Email</td>
+                    <td>@c.PhoneNo</td>
+                    <td>
+                        <a asp-controller="Customer"
+                           asp-action="Edit"
+                           asp-route-id="@c.CustomerID">
+                            Edit
+                        </a>
+                    </td>
+                </tr>
+            }
+        </table>
+
+    </div>
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            // 🔁 safe fallback
+            window.location.href = '/';
+        }
+    }
+</script>

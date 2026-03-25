@@ -1,0 +1,64 @@
+﻿@model ERPSystem.Models.GRN
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <div class="topbar">
+        <h3>✏ Edit GRN</h3>
+        <a asp-action="Index">← Back</a>
+    </div>
+
+    <div class="card" style="max-width:900px;margin:auto;padding:30px">
+
+        <form asp-action="Edit" method="post">
+
+            <input type="hidden" name="GRNID" value="@Model.GRNID" />
+
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:22px">
+
+                <div>
+                    <label>GRN Date</label>
+                    <input type="date" name="GRNDate" value="@Model.GRNDate.ToString("yyyy-MM-dd")"
+                           class="form-input" required />
+                </div>
+
+                <div>
+                    <label>Item Code</label>
+                    <input name="ItemCode" value="@Model.ItemCode" class="form-input" required />
+                </div>
+
+                <div>
+                    <label>Qty</label>
+                    <input type="number" step="0.01" name="Qty" value="@Model.Qty" class="form-input" required />
+                </div>
+
+                <div>
+                    <label>Batch Code</label>
+                    <input name="BatchCode" value="@Model.BatchCode" class="form-input" />
+                </div>
+
+                <div>
+                    <label>Login ID</label>
+                    <input name="LoginID" value="@Model.LoginID" class="form-input" />
+                </div>
+
+                <div>
+                    <label>Vendor Name</label>
+                    <input name="VendorName" value="@Model.VendorName" class="form-input" />
+                </div>
+
+                <div>
+                    <label>Value Qty</label>
+                    <input type="number" step="0.01" name="ValueQty"
+                           value="@Model.ValueQty" class="form-input" />
+                </div>
+
+            </div>
+
+            <div style="margin-top:25px;text-align:right">
+                <button type="submit" class="btn btn-primary">Update GRN</button>
+            </div>
+
+        </form>
+    </div>
+</div>

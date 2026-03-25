@@ -1,0 +1,116 @@
+﻿@model List<ERPSystem.Models.BOM>
+@{
+    var product = ViewBag.Product as ERPSystem.Models.Product;
+}
+
+<div class="container-fluid mt-4">
+
+    <!-- HEADER CARD -->
+    <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+
+        <div class="d-flex justify-content-between align-items-center">
+
+            <!-- LEFT : TITLE + PRODUCT INFO -->
+            <div>
+                <h3 class="fw-bold mb-3">BOM</h3>
+
+                <div class="d-flex gap-3">
+
+                    <div class="px-3 py-2 bg-light rounded-3">
+                        <small class="text-muted">Product ID</small><br />
+                        <strong>@product.ProductID</strong>
+                    </div>
+
+                    <div class="px-3 py-2 bg-light rounded-3">
+                        <small class="text-muted">Product Name</small><br />
+                        <strong>@product.ProdName</strong>
+                    </div>
+
+                    <div class="px-3 py-2 bg-primary bg-opacity-10 rounded-3">
+                        <small class="text-muted">Model No</small><br />
+                        <strong class="text-primary">@product.ModelNo</strong>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- RIGHT : ACTION BUTTONS -->
+            <div class="d-flex gap-2">
+
+                <!-- 🔙 BACK -->
+                <button type="button"
+                        onclick="history.back();"
+                        class="btn btn-outline-secondary px-4">
+                    ← Back
+                </button>
+
+                <!-- ADD BOM -->
+                <a asp-controller="BOM"
+                   asp-action="Create"
+                   asp-route-productId="@product.ProductID"
+                   class="btn btn-primary px-4">
+                    Add BOM
+                </a>
+
+                <!-- ADD ITEM -->
+                <a asp-controller="ItemData"
+                   asp-action="SelectForBOM"
+                   asp-route-productId="@product.ProductID"
+                   asp-route-modelNo="@product.ModelNo"
+                   class="btn btn-primary px-4">
+                    Add Item
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- TABLE CARD -->
+    <div class="bg-white rounded-4 shadow-sm p-4">
+
+        <table class="table align-middle mb-0">
+            <thead class="text-muted small">
+                <tr>
+                    <th>Model No</th>
+                    <th>Description</th>
+                    <th>Item Code</th>
+                    <th>Item Name</th>
+                    <th class="text-center">Qty</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ModelNo</td>
+                        <td>@item.Description</td>
+                        <td>@item.ItemCode</td>
+                        <td>@item.ItemName</td>
+
+                        <!-- QTY BADGE -->
+                        <td class="text-center">
+                            <span class="badge rounded-pill bg-warning text-dark px-3 py-2">
+                                @item.Qty
+                            </span>
+                        </td>
+
+                        <td>
+                            <a asp-controller="BOM"
+                               asp-action="Edit"
+                               asp-route-id="@item.BOMID"
+                               class="text-primary fw-semibold text-decoration-none">
+                                Edit
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+

@@ -1,0 +1,152 @@
+﻿@model List<ERPSystem.Models.PO>
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="main-content">
+
+    <!-- Top Bar -->
+    <div class="topbar"
+         style="display:flex;justify-content:space-between;align-items:center">
+
+        <!-- LEFT : TITLE + QUICK LINKS -->
+        <div style="display:flex;align-items:center;gap:20px">
+            <div>
+                <h3 style="margin:0">📦 Purchase Orders</h3>
+                <small style="color:#666">Manage all purchase orders</small>
+            </div>
+
+            <!-- ✅ CUSTOMER BUTTON -->
+            <a asp-controller="Customer"
+               asp-action="Index"
+               style="background:#e0ecff;color:#1e40af;
+                      padding:6px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                Customer
+            </a>
+
+            <!-- ✅ SALESPERSON BUTTON -->
+            <a asp-controller="Salesperson"
+               asp-action="Index"
+               style="background:#dcfce7;color:#166534;
+                      padding:6px 14px;border-radius:6px;
+                      text-decoration:none;font-weight:600;">
+                Salesperson
+            </a>
+        </div>
+
+        <!-- RIGHT : ACTIONS -->
+        <div style="display:flex;gap:12px;align-items:center">
+
+            <!-- 🔙 BACK TO DASHBOARD -->
+            <a asp-controller="Dashboard"
+               asp-action="Index"
+               style="background:#e5e7eb;color:#111;
+          padding:8px 14px;border-radius:6px;
+          font-weight:600;text-decoration:none;">
+                ← Back
+            </a>
+
+
+            <!-- ➕ CREATE PO -->
+            <a asp-controller="PO" asp-action="Create"
+               style="background:#2a5298;color:white;
+                      padding:10px 18px;border-radius:8px;
+                      text-decoration:none;font-weight:600;">
+                ➕ Create PO
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Card -->
+    <div class="card" style="margin-top:20px;padding:20px">
+
+        <div style="overflow-x:auto">
+            <table width="100%" cellpadding="12" cellspacing="0"
+                   style="border-collapse:collapse">
+
+                <thead style="background:#f1f5f9">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>PO No</th>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Salesperson</th>
+                        <th>Warranty</th>
+                        <th>Attachment</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var po in Model)
+                    {
+                        <tr style="border-bottom:1px solid #e5e7eb">
+                            <td>
+                                <span style="background:#e0ecff;color:#2a5298;
+                                                 padding:4px 10px;border-radius:20px;
+                                                 font-weight:600;font-size:12px">
+                                    @po.OrderID
+                                </span>
+                            </td>
+
+                            <td style="font-weight:600">@po.PONo</td>
+                            <td>@po.Customerid</td>
+                            <td>@po.productid</td>
+
+                            <td>
+                                <span style="background:#fef3c7;color:#92400e;
+                                                 padding:4px 10px;border-radius:20px;
+                                                 font-weight:600;font-size:12px">
+                                    @po.qty
+                                </span>
+                            </td>
+
+                            <td>@po.Salesperson</td>
+                            <td>@po.WarrantyYEAR Year</td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(po.Attachment))
+                                {
+                                    <a href="@po.Attachment" target="_blank"
+                                       style="color:#2a5298;font-weight:600;
+                                                      text-decoration:none">
+                                        📎 View
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span style="color:#999">No File</span>
+                                }
+                            </td>
+
+                            <td>
+                                <a asp-controller="PO"
+                                   asp-action="Edit"
+                                   asp-route-id="@po.OrderID"
+                                   style="background:#e0ecff;color:#2a5298;
+                                              padding:6px 12px;border-radius:6px;
+                                              text-decoration:none;font-weight:600">
+                                    ✏ Edit
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            window.location.href = '/';
+        }
+    }
+</script>

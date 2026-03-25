@@ -1,0 +1,21 @@
+﻿@model ERPSystem.Models.Login
+<link rel="stylesheet" href="~/css/site.css" />
+
+<div class="login-container">
+    <div class="login-card">
+        <h2>ERP System</h2>
+        <p>Secure Login Portal</p>
+
+        <form asp-action="Login" method="post">
+            <input type="text" name="LoginId" placeholder="Login ID" required />
+            <input type="password" name="Passwordhash" placeholder="Password" required />
+
+            <button type="submit">Login</button>
+        </form>
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="error-msg">@ViewBag.Error</div>
+        }
+    </div>
+</div>

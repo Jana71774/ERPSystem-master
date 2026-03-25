@@ -1,0 +1,66 @@
+﻿@model ERPSystem.Models.Spec
+@{
+    ViewData["Title"] = "Add Specification";
+    Layout = "_Layout";
+}
+
+<style>
+    .erp-form {
+        max-width: 600px;
+        margin: auto;
+        border: 2px solid #2da2ff;
+        border-radius: 6px;
+        background: #f9fbfd;
+        padding: 20px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="erp-form">
+
+        <div class="d-flex justify-content-between mb-3">
+            <h6>Add Specification</h6>
+
+            <!-- 🔙 BACK -->
+            <button type="button"
+                    class="btn btn-sm btn-secondary"
+                    onclick="history.back();">
+                ← Back
+            </button>
+        </div>
+
+        <form asp-action="Create" method="post">
+
+            <input type="hidden" asp-for="ItemCode" value="@ViewBag.ItemCode" />
+            <input type="hidden" asp-for="ItemName" value="@ViewBag.ItemName" />
+
+            <div class="mb-3">
+                <label class="form-label">Item Code</label>
+                <input class="form-control" value="@ViewBag.ItemCode" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Spec ID</label>
+                <input asp-for="SpecId" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Spec Data</label>
+                <input asp-for="SpecData" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Spec Value</label>
+                <input asp-for="SpecValue" class="form-control" required />
+            </div>
+
+            <div class="text-end">
+                <button class="btn btn-sm btn-primary">
+                    Save
+                </button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
