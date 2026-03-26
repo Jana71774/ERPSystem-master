@@ -1,75 +1,81 @@
-﻿@model List<ERPSystem.Models.ItemMaster>
-<link rel="stylesheet" href="~/css/site.css" />
+﻿@model IEnumerable<ERPSystem.Models.ItemMaster>
 
-<div class="main-content">
+@{
+    ViewData["Title"] = "Item Master Management";
+}
 
-    <div class="topbar"
-         style="display:flex;justify-content:space-between;align-items:center">
+<div class="container-fluid">
 
-        <h3>Item Master</h3>
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4>Item Master Management</h4>
+        </div>
 
-        <div style="display:flex;gap:12px;align-items:center">
+        <div class="card-body">
 
-            <!-- 🔙 BACK -->
-            <button type="button"
-                    onclick="goBack();"
-                    style="background:#e5e7eb;color:#111;
-                           padding:8px 14px;border-radius:6px;
-                           border:none;font-weight:600;">
-                ← Back
-            </button>
+            <ejs-grid id="ItemMasterGrid"
+                      dataSource="@Model"
+                      allowPaging="true"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Search", "ExcelExport" })">
 
-            <a asp-action="Create"
-               style="background:#2a5298;color:white;
-                      padding:8px 14px;border-radius:6px;
-                      text-decoration:none;font-weight:600;">
-                + Add Item
-            </a>
+                <e-data-manager url="/ItemMaster/UrlDataSource"
+                                insertUrl="/ItemMaster/Insert"
+                                updateUrl="/ItemMaster/Update"
+                                removeUrl="/ItemMaster/Delete"
+                                adaptor="UrlAdaptor">
+                </e-data-manager>
+
+                <e-grid-editSettings allowAdding="true"
+                                     allowEditing="true"
+                                     allowDeleting="true"
+                                     mode="Dialog">
+                </e-grid-editSettings>
+
+                <e-grid-columns>
+
+                    <e-grid-column field="ItemCode"
+                                   headerText="Item Code"
+                                   isPrimaryKey="true"
+                                   validationRules="@(new { required = true })"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemName"
+                                   headerText="Item Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemType"
+                                   headerText="Item Type"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemDesc"
+                                   headerText="Description"
+                                   width="250">
+                    </e-grid-column>
+
+                    <e-grid-column field="CreatedBy"
+                                   headerText="Created By"
+                                   width="150"
+                                   allowEditing="false">
+                    </e-grid-column>
+
+                    <e-grid-column field="CreatedOn"
+                                   headerText="Created On"
+                                   format="yMd"
+                                   type="date"
+                                   allowEditing="false"
+                                   width="180">
+                    </e-grid-column>
+
+                </e-grid-columns>
+
+            </ejs-grid>
+
         </div>
     </div>
 
-    <div class="card" style="margin-top:20px;padding:20px">
-
-        <table width="100%" cellpadding="12" cellspacing="0"
-               style="border-collapse:collapse">
-
-            <thead style="background:#f1f5f9">
-                <tr>
-                    <th>Item Code</th>
-                    <th>Item Name</th>
-                    <th>Type</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var i in Model)
-                {
-                    <tr style="border-bottom:1px solid #e5e7eb">
-                        <td>@i.ItemCode</td>
-                        <td style="font-weight:600">@i.ItemName</td>
-                        <td>@i.ItemType</td>
-                        <td>
-                            <a asp-action="Edit"
-                               asp-route-id="@i.ItemCode"
-                               style="color:#2563eb;font-weight:600;text-decoration:none;">
-                                Edit
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-
-        </table>
-    </div>
 </div>
-
-<script>
-    function goBack() {
-        if (document.referrer && document.referrer !== window.location.href) {
-            window.history.back();
-        } else {
-            window.location.href = '/ItemMaster/Index';
-        }
-    }
-</script>

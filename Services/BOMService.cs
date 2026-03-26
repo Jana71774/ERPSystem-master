@@ -20,6 +20,11 @@ namespace ERPSystem.Services
             return data.ToList();
         }
 
+        public async Task<BOM> GetById(int id)
+        {
+            return await _dal.GetById(id);
+        }
+
         public async Task Insert(BOM model)
         {
             await _dal.Insert(model);

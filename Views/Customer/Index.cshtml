@@ -30,34 +30,52 @@
 
     <div class="card">
 
-        <table width="100%" cellpadding="12">
-            <tr style="background:#f1f5f9">
-                <th>ID</th>
-                <th>Contact Person</th>
-                <th>Region</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Action</th>
-            </tr>
+    <ejs-grid id="CustomerGrid"
+              dataSource="@Model">
 
-            @foreach (var c in Model)
-            {
-                <tr>
-                    <td>@c.CustomerID</td>
-                    <td>@c.ContactPerson</td>
-                    <td>@c.Region</td>
-                    <td>@c.Email</td>
-                    <td>@c.PhoneNo</td>
-                    <td>
-                        <a asp-controller="Customer"
-                           asp-action="Edit"
-                           asp-route-id="@c.CustomerID">
-                            Edit
-                        </a>
-                    </td>
-                </tr>
-            }
-        </table>
+        <e-grid-columns>
+
+            <e-grid-column field="CustomerID"
+                           headerText="ID"
+                           width="100">
+            </e-grid-column>
+
+            <e-grid-column field="ContactPerson"
+                           headerText="Contact Person"
+                           width="180">
+            </e-grid-column>
+
+            <e-grid-column field="Region"
+                           headerText="Region"
+                           width="150">
+            </e-grid-column>
+
+            <e-grid-column field="Email"
+                           headerText="Email"
+                           width="200">
+            </e-grid-column>
+
+            <e-grid-column field="PhoneNo"
+                           headerText="Phone"
+                           width="150">
+            </e-grid-column>
+
+            <e-grid-column headerText="Action"
+                           width="120"
+                           template="#actionTemplate">
+            </e-grid-column>
+
+        </e-grid-columns>
+
+    </ejs-grid>
+
+</div>
+
+<script id="actionTemplate" type="text/x-template">
+    <a href="/Customer/Edit/${CustomerID}">
+        Edit
+    </a>
+</script>
 
     </div>
 </div>

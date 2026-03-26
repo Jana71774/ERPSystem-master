@@ -1,107 +1,72 @@
-﻿@model List<ERPSystem.Models.Product>
-<link rel="stylesheet" href="~/css/site.css" />
+﻿@model IEnumerable<ERPSystem.Models.Product>
 
-<div class="main-content">
+@{
+    ViewData["Title"] = "Product Management";
+}
 
-    <!-- Header -->
-    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
-        <h3>Products</h3>
+<div class="container-fluid">
 
-        <div style="display:flex;gap:15px;align-items:center">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Product Management</h4>
+        </div>
 
-            <!-- 🔙 BACK (PREVIOUS PAGE) -->
-            <button type="button"
-                    onclick="goBack();"
-                    style="background:#e5e7eb;color:#111;
-                           padding:6px 14px;border-radius:6px;
-                           border:none;font-weight:600;">
-                ← Back
-            </button>
+        <div class="card-body">
 
-            <!-- ADD PRODUCT -->
-            <a asp-controller="Product" asp-action="Create"
-               style="color:#2563eb;font-weight:600;text-decoration:none;">
-                + Add Product
-            </a>
+            <ejs-grid id="ProductGrid"
+                      dataSource="@Model"
+                      allowPaging="true"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Search", "ExcelExport" })">
+
+                <e-data-manager url="/Product/UrlDataSource"
+                                insertUrl="/Product/Insert"
+                                updateUrl="/Product/Update"
+                                removeUrl="/Product/Delete"
+                                adaptor="UrlAdaptor">
+                </e-data-manager>
+
+                <e-grid-editSettings allowAdding="true"
+                                     allowEditing="true"
+                                     allowDeleting="true"
+                                     mode="Dialog">
+                </e-grid-editSettings>
+
+                <e-grid-columns>
+
+                    <e-grid-column field="ProductID"
+                                   headerText="Product ID"
+                                   isPrimaryKey="true"
+                                   validationRules="@(new { required = true })"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ProdName"
+                                   headerText="Product Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="ModelNo"
+                                   headerText="Model No"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ModelName"
+                                   headerText="Model Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="Description"
+                                   headerText="Description"
+                                   width="250">
+                    </e-grid-column>
+
+                </e-grid-columns>
+
+            </ejs-grid>
 
         </div>
     </div>
 
-    <!-- Card -->
-    <div class="card" style="margin-top:20px;padding:20px">
-
-        <table width="100%" cellpadding="12" cellspacing="0" style="border-collapse:collapse">
-
-            <thead style="background:#f9fafb">
-                <tr>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                    <th>BOM</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var p in Model)
-                {
-                    <tr style="border-bottom:1px solid #e5e7eb">
-
-                        <td>@p.ProductID</td>
-                        <td style="font-weight:600">@p.ProdName</td>
-                        <td>@p.Description</td>
-
-                        <!-- Edit -->
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@p.ProductID" class="btn btn-warning">Edit</a>
-                        </td>
-
-                        <!-- BOM -->
-                        <td>
-                            <a asp-controller="BOM"
-                               asp-action="Index"
-                               asp-route-productId="@p.ProductID"
-                               style="color:#10b981;font-weight:600;text-decoration:none;">
-                                BOM
-                            </a>
-                        </td>
-
-                    </tr>
-                }
-            </tbody>
-
-        </table>
-
-    </div>
-
 </div>
-
-<script>
-    function goBack() {
-        if (document.referrer && document.referrer !== window.location.href) {
-            window.history.back();
-        } else {
-            // 🔁 fallback (safe default)
-            window.location.href = '/';
-        }
-    }
-</script>
-
-<style>
-    th {
-        text-align: left;
-        font-size: 13px;
-        color: #374151;
-        padding: 10px;
-    }
-
-    td {
-        font-size: 13px;
-        color: #111827;
-        padding: 10px;
-    }
-
-    tr:hover {
-        background: #f9fafb;
-    }
-</style>

@@ -10,7 +10,8 @@ public class ItemData
     [Required]
     public string ItemName { get; set; } = null!;
 
-    public string? ItemDataValue { get; set; } // renamed from "itemdata" to avoid conflict
+    [Column("itemdata")]
+    public string? ItemDataValue { get; set; }
 
     public string? SpecID { get; set; }
     public string? SpecData { get; set; }
