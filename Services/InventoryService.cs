@@ -1,6 +1,7 @@
 using ERPSystem.Models;
 using ERPSystem.DAL;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ERPSystem.Services
@@ -20,14 +21,26 @@ namespace ERPSystem.Services
             return data.ToList();
         }
 
+        public async Task<List<Inventory>> GetPagedAsync(int page, int size)
+        {
+            var data = await _dal.GetPagedAsync(page, size);
+            return data.ToList();
+        }
+
+        public async Task<Inventory> GetByIdAsync(int id)
+        {
+            return await _dal.GetByIdAsync(id);
+        }
 
         public async Task Insert(Inventory model)
         {
+            model.ItemData = null;
             await _dal.Insert(model);
         }
 
         public async Task Update(Inventory model)
         {
+            model.ItemData = null;
             await _dal.Update(model);
         }
 

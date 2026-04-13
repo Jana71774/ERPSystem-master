@@ -1,34 +1,90 @@
+<<<<<<< HEAD
 ﻿@model List<ERPSystem.Models.ItemMaster>
 <link rel="stylesheet" href="~/css/site.css" />
 <link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet">
+=======
+﻿@model IEnumerable<ERPSystem.Models.ItemMaster>
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 
-<div class="main-content">
+@{
+    ViewData["Title"] = "Item Master Management";
+}
 
-    <div class="topbar"
-         style="display:flex;justify-content:space-between;align-items:center">
+<div class="container-fluid">
 
-        <h3>Item Master</h3>
+    <div class="card shadow">
+        <div class="card-header bg-info text-white">
+            <h4>Item Master Management</h4>
+        </div>
 
-        <div style="display:flex;gap:12px;align-items:center">
+        <div class="card-body">
 
-            <!-- 🔙 BACK -->
-            <button type="button"
-                    onclick="goBack();"
-                    style="background:#e5e7eb;color:#111;
-                           padding:8px 14px;border-radius:6px;
-                           border:none;font-weight:600;">
-                ← Back
-            </button>
+            <ejs-grid id="ItemMasterGrid"
+                      dataSource="@Model"
+                      allowPaging="true"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Search", "ExcelExport" })">
 
-            <a asp-action="Create"
-               style="background:#2a5298;color:white;
-                      padding:8px 14px;border-radius:6px;
-                      text-decoration:none;font-weight:600;">
-                + Add Item
-            </a>
+                <e-data-manager url="/ItemMaster/UrlDataSource"
+                                insertUrl="/ItemMaster/Insert"
+                                updateUrl="/ItemMaster/Update"
+                                removeUrl="/ItemMaster/Delete"
+                                adaptor="UrlAdaptor">
+                </e-data-manager>
+
+                <e-grid-editSettings allowAdding="true"
+                                     allowEditing="true"
+                                     allowDeleting="true"
+                                     mode="Dialog">
+                </e-grid-editSettings>
+
+                <e-grid-columns>
+
+                    <e-grid-column field="ItemCode"
+                                   headerText="Item Code"
+                                   isPrimaryKey="true"
+                                   validationRules="@(new { required = true })"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemName"
+                                   headerText="Item Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemType"
+                                   headerText="Item Type"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ItemDesc"
+                                   headerText="Description"
+                                   width="250">
+                    </e-grid-column>
+
+                    <e-grid-column field="CreatedBy"
+                                   headerText="Created By"
+                                   width="150"
+                                   allowEditing="false">
+                    </e-grid-column>
+
+                    <e-grid-column field="CreatedOn"
+                                   headerText="Created On"
+                                   format="yMd"
+                                   type="date"
+                                   allowEditing="false"
+                                   width="180">
+                    </e-grid-column>
+
+                </e-grid-columns>
+
+            </ejs-grid>
+
         </div>
     </div>
 
+<<<<<<< HEAD
     <div class="card" style="margin-top:20px;padding:20px">
 
         <!-- GRID -->
@@ -83,3 +139,6 @@
         }
     }
 </script>
+=======
+</div>
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20

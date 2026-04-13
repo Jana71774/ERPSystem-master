@@ -1,17 +1,24 @@
-﻿@model List<ERPSystem.Models.Product>
-<link rel="stylesheet" href="~/css/site.css" />
+﻿@model IEnumerable<ERPSystem.Models.Product>
 
+<<<<<<< HEAD
 <!-- Syncfusion CSS -->
 <link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet" />
 
 <div class="main-content">
+=======
+@{
+    ViewData["Title"] = "Product Management";
+}
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 
-    <!-- Header -->
-    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
-        <h3>Products</h3>
+<div class="container-fluid">
 
-        <div style="display:flex;gap:15px;align-items:center">
+    <div class="card shadow">
+        <div class="card-header bg-success text-white">
+            <h4>Product Management</h4>
+        </div>
 
+<<<<<<< HEAD
             <a asp-controller="Dashboard" asp-action="Index"
                style="background:#e5e7eb;color:#111;
                       padding:6px 14px;border-radius:6px;
@@ -23,10 +30,67 @@
                style="color:#2563eb;font-weight:600;text-decoration:none;">
                 + Add Product
             </a>
+=======
+        <div class="card-body">
+
+            <ejs-grid id="ProductGrid"
+                      dataSource="@Model"
+                      allowPaging="true"
+                      allowSorting="true"
+                      allowFiltering="true"
+                      toolbar="@(new List<string>() { "Add", "Edit", "Delete", "Search", "ExcelExport" })">
+
+                <e-data-manager url="/Product/UrlDataSource"
+                                insertUrl="/Product/Insert"
+                                updateUrl="/Product/Update"
+                                removeUrl="/Product/Delete"
+                                adaptor="UrlAdaptor">
+                </e-data-manager>
+
+                <e-grid-editSettings allowAdding="true"
+                                     allowEditing="true"
+                                     allowDeleting="true"
+                                     mode="Dialog">
+                </e-grid-editSettings>
+
+                <e-grid-columns>
+
+                    <e-grid-column field="ProductID"
+                                   headerText="Product ID"
+                                   isPrimaryKey="true"
+                                   validationRules="@(new { required = true })"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ProdName"
+                                   headerText="Product Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="ModelNo"
+                                   headerText="Model No"
+                                   width="150">
+                    </e-grid-column>
+
+                    <e-grid-column field="ModelName"
+                                   headerText="Model Name"
+                                   width="200">
+                    </e-grid-column>
+
+                    <e-grid-column field="Description"
+                                   headerText="Description"
+                                   width="250">
+                    </e-grid-column>
+
+                </e-grid-columns>
+
+            </ejs-grid>
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 
         </div>
     </div>
 
+<<<<<<< HEAD
     <!-- GRID -->
     <div class="card" style="margin-top:20px;padding:20px">
 
@@ -87,3 +151,6 @@
 
     grid.appendTo('#Grid');
 </script>
+=======
+</div>
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20

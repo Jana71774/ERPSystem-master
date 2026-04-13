@@ -19,6 +19,12 @@ namespace ERPSystem.DAL
             return await _context.BOM.ToListAsync();
         }
 
+        // ADD THIS METHOD
+        public async Task<BOM> GetById(int id)
+        {
+            return await _context.BOM
+                .FirstOrDefaultAsync(x => x.BOMID == id ) ??new BOM() ;
+        }
         public async Task Insert(BOM model)
         {
             await _context.BOM.AddAsync(model);

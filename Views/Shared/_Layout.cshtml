@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - ERPSystem</title>
+<<<<<<< HEAD
 
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://cdn.syncfusion.com/ej2/26.1.35/bootstrap5.css" rel="stylesheet" />
@@ -43,5 +44,45 @@
     @RenderBody()
 </div>
 
+=======
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/ERPSystem.styles.css" asp-append-version="true" />
+    <link href="https://cdn.syncfusion.com/ej2/33.1.45/material.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">ERPSystem</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.syncfusion.com/ej2/33.1.45/dist/ej2.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 </body>
 </html>

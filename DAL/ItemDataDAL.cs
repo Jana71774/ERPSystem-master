@@ -16,7 +16,13 @@ namespace ERPSystem.DAL
 
         public async Task<IEnumerable<ItemData>> GetAll()
         {
-            return await _context.ItemData.ToListAsync();
+            return await _context.ItemData
+                .Select(i => new ItemData 
+                { 
+                    ItemCode = i.ItemCode, 
+                    ItemName = i.ItemName 
+                })
+                .ToListAsync();
         }
 
         public async Task Insert(ItemData model)
@@ -31,7 +37,15 @@ namespace ERPSystem.DAL
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task<ItemData?> GetById(string id)
+        {
+            var item = await _context.ItemData.FindAsync(id);
+            if (item == null) return null;
+            item.ItemName = item.ItemName; // trigger load
+            return item;
+        }
+
+        public async Task Delete(string id)
         {
             var data = await _context.ItemData.FindAsync(id);
             if (data != null)

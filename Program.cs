@@ -1,9 +1,12 @@
 ﻿using ERPSystem.Services;
 using ERPSystem.DAL;
 using Microsoft.EntityFrameworkCore;
+using Syncfusion.Licensing;
+using Syncfusion.EJ2;
 
 var builder = WebApplication.CreateBuilder(args);
 
+<<<<<<< HEAD
 // MVC
 builder.Services.AddControllersWithViews();
 
@@ -26,6 +29,30 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 // ===================== DAL =====================
+=======
+// Register Syncfusion License
+SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JGaF1cXmhKYVJxWmFZfVhgd19FaVZTQWYuP1ZhSXxVdkZiWX9dc31XQ2dYWUB9XEA=");
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JGaF1cXmhKYVJxWmFZfVhgd19FaVZTQWYuP1ZhSXxVdkZiWX9dc31XQ2dYWUB9XEA=");
+
+// MVC
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
+
+// Syncfusion
+
+builder.Services.AddSyncfusionSmartComponents();
+
+// Database
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseMySql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        new MySqlServerVersion(new Version(8, 0, 36))
+    ));
+
+// DAL Registration
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 builder.Services.AddScoped<LoginDAL>();
 builder.Services.AddScoped<CustomerDAL>();
 builder.Services.AddScoped<ProductDAL>();
@@ -40,7 +67,11 @@ builder.Services.AddScoped<SpecDAL>();
 builder.Services.AddScoped<TransSpecDataDAL>();
 builder.Services.AddScoped<DashboardDAL>();
 
+<<<<<<< HEAD
 // ===================== SERVICES =====================
+=======
+// Services
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 builder.Services.AddScoped<LoginService>();
 builder.Services.AddScoped<CustomerService>();
 builder.Services.AddScoped<ProductService>();
@@ -63,7 +94,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+<<<<<<< HEAD
 // 🔹 session must be before authorization
+=======
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
 app.UseSession();
 
 app.UseAuthorization();

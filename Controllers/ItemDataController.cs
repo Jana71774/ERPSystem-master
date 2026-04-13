@@ -19,6 +19,11 @@ namespace ERPSystem.Controllers
             return View(await _service.GetAll());
         }
 
+        public async Task<IActionResult> SelectForBOM()
+        {
+            return View(await _service.GetAll());
+        }
+
         public IActionResult Create()
         {
             return View();
@@ -31,6 +36,7 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
+<<<<<<< HEAD
         // FIXED: Add Edit actions for string ItemCode PK
         public async Task<IActionResult> Edit(string id)
         {
@@ -53,6 +59,46 @@ namespace ERPSystem.Controllers
         }
 
         public async Task<IActionResult> Delete(int id)
+=======
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var itemData = await _service.GetById(id);
+            if (itemData == null)
+            {
+                return NotFound();
+            }
+            return View(itemData);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, ItemData model)
+        {
+            if (id != model.ItemCode)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _service.Update(model);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    // Log error if needed
+                }
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+>>>>>>> 2e17255de0e76bfeb232eb5aa76ea0b362eb7a20
         {
             await _service.Delete(id);
             return RedirectToAction("Index");
