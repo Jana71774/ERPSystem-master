@@ -3,13 +3,18 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: #f4f6f9;
+    min-height: 100vh;
+}
+
+html {
+    height: 100%;
 }
 
 /* ===== Login Page ===== */
 .login-container {
     display: flex;
     height: 100vh;
-    background: linear-gradient(120deg, #1e3c72, #2a5298);
+    background: linear-gradient(120deg, #f0f1f3, #4a5e81);
     align-items: center;
     justify-content: center;
 }
@@ -44,7 +49,7 @@ body {
     }
 
         .login-card input:focus {
-            border-color: #2a5298;
+            border-color: #a9adb4;
         }
 
     .login-card button {
@@ -69,18 +74,18 @@ body {
     margin-top: 10px;
 }
 
-/* ===== Dashboard Layout ===== */
-.dashboard {
-    display: flex;
-    height: 100vh;
-}
-
-/* Sidebar */
+/* ===== Global Layout ===== */
 .sidebar {
     width: 240px;
     background: #1e293b;
     color: #fff;
     padding-top: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    z-index: 1000;
+    overflow-y: auto;
 }
 
     .sidebar h2 {
@@ -103,10 +108,25 @@ body {
             color: #fff;
         }
 
-/* Main Content */
+.main-wrapper {
+    margin-left: 240px;
+    min-height: 100vh;
+    padding: 20px;
+}
+
 .main-content {
-    flex: 1;
-    padding: 30px;
+    margin-left: 0;
+    padding: 0;
+}
+
+button[type="button"][onclick*="goBack"], button[onclick*="history"] {
+    position: relative;
+    z-index: 1001;
+}
+
+/* Back button styles */
+button:contains("← Back"), button:contains("Back") {
+    z-index: 1001;
 }
 
 .topbar {
@@ -118,6 +138,13 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 25px;
+}
+
+/* ===== Dashboard Layout ===== */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+    gap: 20px;
 }
 
 .cards {
@@ -149,3 +176,35 @@ body {
         color: #666;
         font-size: 14px;
     }
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+    
+    .main-wrapper {
+        margin-left: 0;
+        padding: 10px;
+    }
+    
+    /* Toggle class for sidebar */
+    .sidebar.open {
+        transform: translateX(0);
+    }
+    
+    .navbar-toggler {
+        z-index: 1001;
+    }
+}
+
+/* Form styling for other pages */
+.field-validation-error {
+    color: #dc3545;
+}
+
+.validation-summary-errors ul {
+    color: #dc3545;
+}
+

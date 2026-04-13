@@ -1,6 +1,7 @@
 using ERPSystem.Models;
 using ERPSystem.DAL;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ERPSystem.Services
@@ -20,6 +21,11 @@ namespace ERPSystem.Services
             return data.ToList();
         }
 
+        public async Task<List<Spec>> GetByItemCode(string itemCode)
+        {
+            var data = await _dal.GetByItemCode(itemCode);
+            return data.ToList();
+        }
 
         public async Task Insert(Spec model)
         {
@@ -31,9 +37,9 @@ namespace ERPSystem.Services
             await _dal.Update(model);
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string itemCode, string specId)
         {
-            await _dal.Delete(id);
+            await _dal.Delete(itemCode, specId);
         }
     }
 }

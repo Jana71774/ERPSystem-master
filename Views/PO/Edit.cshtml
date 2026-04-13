@@ -3,7 +3,7 @@
 
 <div class="main-content">
 
-    <div class="topbar">
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
         <h3>✏ Edit Purchase Order</h3>
         <a asp-controller="PO" asp-action="Index"
            style="text-decoration:none;color:#2a5298;font-weight:600;">
@@ -15,8 +15,8 @@
 
         <form asp-action="Edit" method="post" enctype="multipart/form-data">
 
-            <!-- Hidden Auto PK -->
-            <input type="hidden" name="OrderID" value="@Model.OrderID" />
+            <!-- Hidden Primary Key -->
+            <input type="hidden" asp-for="OrderID" />
 
             <!-- Header -->
             <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px;
@@ -35,51 +35,70 @@
             </div>
 
             <!-- Form Grid -->
+            <!-- FIELD ORDER NOW MATCHES CREATE FORM -->
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
 
+                <!-- PO No -->
                 <div>
-                    <label class="form-label">PO No</label>
-                    <input name="PONo" value="@Model.PONo" class="form-input" />
+                    <label asp-for="PONo" class="form-label">PO No</label>
+                    <input asp-for="PONo" class="form-input" />
+                    <span asp-validation-for="PONo" class="text-danger"></span>
                 </div>
 
+                <!-- Customer ID -->
                 <div>
-                    <label class="form-label">Customer ID</label>
-                    <input name="Customerid" value="@Model.Customerid" class="form-input" />
+                    <label asp-for="Customerid" class="form-label">Customer ID</label>
+                    <input asp-for="Customerid" class="form-input" />
+                    <span asp-validation-for="Customerid" class="text-danger"></span>
                 </div>
 
+                <!-- Quantity -->
                 <div>
-                    <label class="form-label">Quantity</label>
-                    <input type="number" name="qty" value="@Model.qty" class="form-input" />
+                    <label asp-for="qty" class="form-label">Quantity</label>
+                    <input asp-for="qty" type="number" class="form-input" />
+                    <span asp-validation-for="qty" class="text-danger"></span>
                 </div>
 
+                <!-- Product ID -->
                 <div>
-                    <label class="form-label">Product ID</label>
-                    <input name="productid" value="@Model.productid" class="form-input" />
+                    <label asp-for="productid" class="form-label">Product ID</label>
+                    <input asp-for="productid" class="form-input" />
+                    <span asp-validation-for="productid" class="text-danger"></span>
                 </div>
 
+                <!-- Licence Type -->
                 <div>
-                    <label class="form-label">Licence Type</label>
-                    <input name="LicenceType" value="@Model.LicenceType" class="form-input" />
+                    <label asp-for="LicenceType" class="form-label">Licence Type</label>
+                    <input asp-for="LicenceType" class="form-input" />
+                    <span asp-validation-for="LicenceType" class="text-danger"></span>
                 </div>
 
+                <!-- Sale Type -->
                 <div>
-                    <label class="form-label">Sale Type</label>
-                    <input name="Saletype" value="@Model.Saletype" class="form-input" />
+                    <label asp-for="Saletype" class="form-label">Sale Type</label>
+                    <input asp-for="Saletype" class="form-input" />
+                    <span asp-validation-for="Saletype" class="text-danger"></span>
                 </div>
 
+                <!-- Salesperson -->
                 <div>
-                    <label class="form-label">Salesperson</label>
-                    <input name="Salesperson" value="@Model.Salesperson" class="form-input" />
+                    <label asp-for="Salesperson" class="form-label">Salesperson</label>
+                    <input asp-for="Salesperson" class="form-input" />
+                    <span asp-validation-for="Salesperson" class="text-danger"></span>
                 </div>
 
+                <!-- Warranty Year -->
                 <div>
-                    <label class="form-label">Warranty (YEAR)</label>
-                    <input type="number" name="WarrantyYEAR" value="@Model.WarrantyYEAR" class="form-input" />
+                    <label asp-for="WarrantyYEAR" class="form-label">Warranty (YEAR)</label>
+                    <input asp-for="WarrantyYEAR" type="number" class="form-input" />
+                    <span asp-validation-for="WarrantyYEAR" class="text-danger"></span>
                 </div>
 
+                <!-- Attachment -->
                 <div>
                     <label class="form-label">Attachment</label>
-                    <input type="file" name="AttachmentFile" class="form-input" />
+                    <input type="file" name="AttachmentFile" accept=".pdf" class="form-input" />
+
                     @if (!string.IsNullOrEmpty(Model.Attachment))
                     {
                         <small>
@@ -89,12 +108,17 @@
                     }
                 </div>
 
+                <!-- Description -->
                 <div style="grid-column:1/4">
-                    <label class="form-label">Description</label>
-                    <textarea name="Description" class="form-input" rows="3">@Model.Description</textarea>
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-input" rows="3"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
 
             </div>
+
+            <!-- Validation Summary -->
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
             <!-- Buttons -->
             <div style="margin-top:30px;display:flex;justify-content:flex-end;gap:15px">
@@ -115,5 +139,31 @@
 
         </form>
 
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+
     </div>
 </div>
+
+<style>
+    .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .form-input:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+    }
+</style>

@@ -6,6 +6,7 @@
 }
 
 <link rel="stylesheet" href="~/css/site.css" />
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet">
 
 <div class="main-content">
 
@@ -21,7 +22,6 @@
 
         <div style="display:flex;gap:12px;align-items:center">
 
-            <!-- 🔙 BACK BUTTON -->
             <button type="button"
                     onclick="history.back();"
                     style="background:#e5e7eb;color:#111;
@@ -30,7 +30,6 @@
                 ← Back
             </button>
 
-            <!-- ADD SPEC -->
             <a asp-controller="TransSpec"
                asp-action="Create"
                asp-route-stockId="@stockId"
@@ -47,72 +46,47 @@
     <!-- CARD -->
     <div class="card" style="margin-top:20px;padding:20px">
 
-        <table class="trans-table">
-            <thead>
-                <tr>
-                    <th>Spec ID</th>
-                    <th>Value</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var s in Model)
-                {
-                    <tr>
-                        <td>@s.SpecID</td>
-                        <td>@s.Value</td>
-                        <td>
-                            <a asp-controller="TransSpec"
-                               asp-action="Edit"
-                               asp-route-stockId="@s.StockID"
-                               asp-route-specid="@s.SpecID"
-                               asp-route-itemcode="@s.Itemcode"
-                               class="edit-link">
-                                ✏ Edit
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <div id="Grid"></div>
 
     </div>
 
 </div>
 
-<style>
-    .trans-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
 
-        .trans-table th {
-            text-align: left;
-            font-size: 12px;
-            color: #6b7280;
-            padding: 12px;
-            background: #f9fafb;
-        }
+<script>
+    var transSpecData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
 
-        .trans-table td {
-            padding: 14px 12px;
-            font-size: 13px;
-            color: #111827;
-            border-bottom: 1px solid #f1f5f9;
-        }
+    var grid = new ej.grids.Grid({
+        dataSource: transSpecData,
+        height: 450,
 
-        .trans-table tr:hover {
-            background: #f9fafb;
-        }
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
 
-    .edit-link {
-        color: #2563eb;
-        font-weight: 600;
-        text-decoration: none;
-    }
+        toolbar: ['Search'],
 
-        .edit-link:hover {
-            text-decoration: underline;
-        }
-</style>
+        columns: [
+            { field: 'StockID', headerText: 'Stock ID', width: 120 },
+            { field: 'ItemName', headerText: 'Item Name', width: 200 },
+            { field: 'SpecName', headerText: 'Spec Name', width: 200 },
+            { field: 'Value', headerText: 'Value', width: 150 },
+            { field: 'Itemcode', headerText: 'Item Code', width: 150 },
+
+            {
+                headerText: 'Edit',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/TransSpec/Edit?stockId=${data.StockID}&specid=${data.SpecID}&itemcode=${data.Itemcode}"
+                               style="color:#2563eb;font-weight:600;text-decoration:none">
+                               ✏ Edit
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
+</script>

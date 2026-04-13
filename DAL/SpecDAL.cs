@@ -19,6 +19,11 @@ namespace ERPSystem.DAL
             return await _context.Spec.ToListAsync();
         }
 
+        public async Task<IEnumerable<Spec>> GetByItemCode(string itemCode)
+        {
+            return await _context.Spec.Where(s => s.ItemCode == itemCode).ToListAsync();
+        }
+
         public async Task Insert(Spec model)
         {
             await _context.Spec.AddAsync(model);
@@ -31,9 +36,9 @@ namespace ERPSystem.DAL
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(string itemCode, string specId)
         {
-            var data = await _context.Spec.FindAsync(id);
+            var data = await _context.Spec.FindAsync(itemCode, specId);
             if (data != null)
             {
                 _context.Spec.Remove(data);

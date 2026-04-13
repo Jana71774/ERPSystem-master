@@ -1,17 +1,147 @@
 ﻿@model ERPSystem.Models.TransSpecDataModel
+<link rel="stylesheet" href="~/css/site.css" />
 
-<h3>Add Variable Spec</h3>
+<div class="main-content">
 
-<form asp-action="Create" method="post">
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
+        <h3>➕ Add Specification Value</h3>
 
-    <input type="hidden" name="StockID" value="@ViewBag.StockID" />
-    <input type="hidden" name="Itemcode" value="@ViewBag.Itemcode" />
+        <!-- BACK BUTTON -->
+        <button type="button"
+                onclick="goBack();"
+                style="background:none;border:none;
+                       color:#2563eb;font-weight:600;
+                       cursor:pointer;">
+            ← Back
+        </button>
+    </div>
 
-    <label>SpecID</label>
-    <input name="SpecID" required />
+    <div class="card" style="max-width:900px;margin:auto;padding:30px">
 
-    <label>Value</label>
-    <input name="Value" />
+        <form asp-action="Create" method="post">
 
-    <button type="submit">Save</button>
+    <!-- FIXED: remove value= -->
+    <input type="hidden" asp-for="StockID" />
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:22px">
+
+        <!-- Item Code -->
+        <div>
+            <label asp-for="Itemcode" class="form-label">Item Code</label>
+            <select asp-for="Itemcode" class="form-input" id="itemCodeSelect">
+                <option value="">Select Item Code</option>
+
+                @if (ViewBag.Items != null)
+                {
+                    @foreach (var item in (SelectList)ViewBag.Items)
+                    {
+                        <option value="@item.Value">@item.Text</option>
+                    }
+                }
+
+            </select>
+            <span asp-validation-for="Itemcode" class="text-danger"></span>
+        </div>
+
+        <!-- Spec ID -->
+        <div>
+            <label asp-for="SpecID" class="form-label">Spec ID</label>
+            <input asp-for="SpecID"
+                   class="form-input"
+                   id="specIdInput"
+                   readonly="readonly" />
+            <span asp-validation-for="SpecID" class="text-danger"></span>
+        </div>
+
+        <!-- Spec Name -->
+        <div>
+            <label asp-for="SpecName" class="form-label">Specification Name</label>
+            <input asp-for="SpecName" class="form-input" />
+            <span asp-validation-for="SpecName" class="text-danger"></span>
+        </div>
+
+        <!-- Value -->
+        <div style="grid-column:1/3">
+            <label asp-for="Value" class="form-label">Specification Value</label>
+            <input asp-for="Value" class="form-input" />
+            <span asp-validation-for="Value" class="text-danger"></span>
+        </div>
+
+    </div>
+
+    <!-- validation summary -->
+    <div asp-validation-summary="All" class="text-danger" style="margin-top:15px"></div>
+
+    <div style="margin-top:25px;display:flex;justify-content:flex-end;gap:12px">
+
+        <button type="button"
+                onclick="goBack();"
+                style="background:#e5e7eb;color:#111;
+                       padding:10px 18px;border-radius:6px;
+                       border:none;font-weight:600;cursor:pointer;">
+            Cancel
+        </button>
+
+        <button type="submit"
+                style="background:#2a5298;color:white;
+                       padding:12px 24px;border-radius:8px;
+                       border:none;font-weight:600;cursor:pointer;">
+            💾 Save Specification
+        </button>
+
+    </div>
+
 </form>
+
+</div>
+
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            window.location.href = '/TransSpec';
+        }
+    }
+
+    $(document).ready(function () {
+        loadNextSpecId();
+    });
+
+    function loadNextSpecId() {
+        $.get('/TransSpec/GetNextSpecId')
+            .done(function (data) {
+                $('#specIdInput').val(data.SpecID || '');
+                $('#specIdInput').prop('readonly', true);
+            })
+            .fail(function () {
+                console.error('Failed to load next Spec ID');
+            });
+    }
+</script>
+
+<style>
+    .form-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 10px 12px;
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .form-input:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+    }
+</style>
+

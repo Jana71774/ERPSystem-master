@@ -1,22 +1,26 @@
 ﻿@model List<ERPSystem.Models.Inventory>
 
+<link rel="stylesheet" href="~/css/site.css" />
+
+<!-- Syncfusion CSS -->
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet" />
+
 <div class="main-content">
 
+    <!-- TOP BAR -->
     <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
-        <h3>Inventory</h3>
+        <h3>📦 Inventory</h3>
 
         <div style="display:flex;gap:12px;align-items:center">
 
-            <!-- 🔙 BACK (PREVIOUS PAGE) -->
             <button type="button"
                     onclick="goBack();"
                     style="background:#e5e7eb;color:#111;
                            padding:8px 14px;border-radius:6px;
-                           border:none;font-weight:600;">
+                           border:none;font-weight:600;cursor:pointer;">
                 ← Back
             </button>
 
-            <!-- ✅ ITEM MASTER BUTTON -->
             <a asp-controller="ItemMaster"
                asp-action="Index"
                style="background:#e0ecff;color:#1e40af;
@@ -25,7 +29,6 @@
                 Item Master
             </a>
 
-            <!-- ADD STOCK -->
             <a asp-controller="Inventory"
                asp-action="Create"
                style="background:#2a5298;color:white;
@@ -37,37 +40,64 @@
         </div>
     </div>
 
-    <table width="100%" cellpadding="12">
-        <tr style="background:#f1f5f9">
-            <th>Item Code</th>
-            <th>Available Qty</th>
-            <th>Min Qty</th>
-            <th>Order Qty</th>
-            <th>Login</th>
-            <th>Date</th>
-            <th>Action</th>
-        </tr>
+    <!-- GRID -->
+    <div class="card" style="margin-top:15px;padding:20px">
 
-        @foreach (var i in Model)
-        {
-            <tr>
-                <td>@i.ItemCode</td>
-                <td>@i.AvlQty</td>
-                <td>@i.MinQty</td>
-                <td>@i.OrderQty</td>
-                <td>@i.LoginName</td>
-                <td>@i.CreatedDate.ToString("dd-MM-yyyy")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@i.ItemCode">Edit</a> 
-                    
-                </td>
-            </tr>
-        }
-    </table>
+        <div id="Grid"></div>
 
+    </div>
 </div>
 
+<!-- Syncfusion JS -->
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
 <script>
+    var inventoryData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    var grid = new ej.grids.Grid({
+        dataSource: inventoryData,
+        height: 450,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            { field: 'ItemCode', headerText: 'Item Code', width: 140 },
+            { field: 'AvlQty', headerText: 'Available Qty', width: 140, textAlign: 'Right' },
+            { field: 'MinQty', headerText: 'Min Qty', width: 120, textAlign: 'Right' },
+            { field: 'OrderQty', headerText: 'Order Qty', width: 130, textAlign: 'Right' },
+            { field: 'LoginName', headerText: 'Login', width: 150 },
+            { field: 'CreatedDate', headerText: 'Date', width: 140, type: 'date', format: 'dd-MM-yyyy' },
+
+            {
+                headerText: 'Action',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/Inventory/Edit/${data.ItemCode}"
+                               style="color:#2563eb;font-weight:600;text-decoration:none;">
+                               Edit
+                            </a>`;
+                }
+            }
+        ],
+
+        // LOW STOCK HIGHLIGHT
+        rowDataBound: function (args) {
+            if (args.data.AvlQty <= args.data.MinQty) {
+                args.row.style.background = '#fff7ed';
+                args.row.cells[1].style.color = '#dc2626';
+                args.row.cells[1].style.fontWeight = '700';
+            }
+        }
+    });
+
+    grid.appendTo('#Grid');
+
+
     function goBack() {
         if (document.referrer && document.referrer !== window.location.href) {
             window.history.back();

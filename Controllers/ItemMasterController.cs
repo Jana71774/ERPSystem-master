@@ -31,9 +31,41 @@ namespace ERPSystem.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(int id)
+public async Task<IActionResult> Edit(string? id)
         {
-            await _service.Delete(id);
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var item = await _service.GetById(id);
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, ItemMaster model)
+        {
+            if (id != model.ItemCode)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _service.Update(model);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(string itemCode)
+        {
+            await _service.Delete(itemCode);
             return RedirectToAction("Index");
         }
     }

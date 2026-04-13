@@ -13,9 +13,17 @@ namespace ERPSystem.Services
             _dal = dal;
         }
 
-        public async Task<Login> ValidateUser(string loginId, string password)
+        public async Task<Login?> ValidateUser(string loginId, string password)
         {
-            return await _dal.ValidateUser(loginId, password);
+            if (string.IsNullOrEmpty(loginId) || string.IsNullOrEmpty(password))
+                return null;
+
+            var user = await _dal.ValidateUser(loginId, password);
+
+            if (user == null || string.IsNullOrEmpty(user.LoginId))
+                return null;
+
+            return user;
         }
     }
 }

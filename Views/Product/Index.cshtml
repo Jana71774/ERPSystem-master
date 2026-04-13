@@ -1,6 +1,9 @@
 ﻿@model List<ERPSystem.Models.Product>
 <link rel="stylesheet" href="~/css/site.css" />
 
+<!-- Syncfusion CSS -->
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet" />
+
 <div class="main-content">
 
     <!-- Header -->
@@ -9,16 +12,13 @@
 
         <div style="display:flex;gap:15px;align-items:center">
 
-            <!-- 🔙 BACK (PREVIOUS PAGE) -->
-            <button type="button"
-                    onclick="goBack();"
-                    style="background:#e5e7eb;color:#111;
-                           padding:6px 14px;border-radius:6px;
-                           border:none;font-weight:600;">
-                ← Back
-            </button>
+            <a asp-controller="Dashboard" asp-action="Index"
+               style="background:#e5e7eb;color:#111;
+                      padding:6px 14px;border-radius:6px;
+                      border:none;font-weight:600;text-decoration:none;">
+                ← Home
+            </a>
 
-            <!-- ADD PRODUCT -->
             <a asp-controller="Product" asp-action="Create"
                style="color:#2563eb;font-weight:600;text-decoration:none;">
                 + Add Product
@@ -27,81 +27,63 @@
         </div>
     </div>
 
-    <!-- Card -->
+    <!-- GRID -->
     <div class="card" style="margin-top:20px;padding:20px">
 
-        <table width="100%" cellpadding="12" cellspacing="0" style="border-collapse:collapse">
-
-            <thead style="background:#f9fafb">
-                <tr>
-                    <th>Product ID</th>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Action</th>
-                    <th>BOM</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var p in Model)
-                {
-                    <tr style="border-bottom:1px solid #e5e7eb">
-
-                        <td>@p.ProductID</td>
-                        <td style="font-weight:600">@p.ProdName</td>
-                        <td>@p.Description</td>
-
-                        <!-- Edit -->
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@p.ProductID" class="btn btn-warning">Edit</a>
-                        </td>
-
-                        <!-- BOM -->
-                        <td>
-                            <a asp-controller="BOM"
-                               asp-action="Index"
-                               asp-route-productId="@p.ProductID"
-                               style="color:#10b981;font-weight:600;text-decoration:none;">
-                                BOM
-                            </a>
-                        </td>
-
-                    </tr>
-                }
-            </tbody>
-
-        </table>
+        <div id="Grid"></div>
 
     </div>
 
 </div>
 
+<!-- Syncfusion JS -->
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
 <script>
-    function goBack() {
-        if (document.referrer && document.referrer !== window.location.href) {
-            window.history.back();
-        } else {
-            // 🔁 fallback (safe default)
-            window.location.href = '/';
-        }
-    }
+    var productData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    var grid = new ej.grids.Grid({
+        dataSource: productData,
+        height: 450,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            { field: 'ProductID', headerText: 'Product ID', width: 130 },
+            { field: 'ProdName', headerText: 'Product Name', width: 200 },
+            { field: 'ModelNo', headerText: 'Model No', width: 150 },
+            { field: 'Description', headerText: 'Description', width: 250 },
+
+            {
+                headerText: 'Edit',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/Product/Edit/${data.ProductID}"
+                               style="background:#e0ecff;color:#2a5298;
+                                      padding:6px 12px;border-radius:6px;
+                                      text-decoration:none;font-weight:600">
+                               Edit
+                            </a>`;
+                }
+            },
+
+            {
+                headerText: 'BOM',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/BOM/Index?productId=${data.ProductID}"
+                               style="color:#10b981;font-weight:600;text-decoration:none">
+                               BOM
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
 </script>
-
-<style>
-    th {
-        text-align: left;
-        font-size: 13px;
-        color: #374151;
-        padding: 10px;
-    }
-
-    td {
-        font-size: 13px;
-        color: #111827;
-        padding: 10px;
-    }
-
-    tr:hover {
-        background: #f9fafb;
-    }
-</style>

@@ -4,6 +4,8 @@
     Layout = "_Layout";
 }
 
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet">
+
 <style>
     .erp-card {
         border: 2px solid #2da2ff;
@@ -28,52 +30,70 @@
             </div>
 
             <div class="d-flex gap-2">
-                <!-- 🔙 BACK -->
+
                 <button type="button"
                         class="btn btn-sm btn-secondary"
                         onclick="history.back();">
                     ← Back
                 </button>
 
-                <!-- ➕ ADD SPEC -->
                 <a asp-action="Create"
                    asp-route-itemCode="@ViewBag.ItemCode"
                    asp-route-itemName="@ViewBag.ItemName"
                    class="btn btn-sm btn-primary">
                     + Add Spec
                 </a>
+
             </div>
         </div>
 
-        <!-- TABLE -->
-        <table class="table table-hover align-middle">
-            <thead class="table-light">
-                <tr>
-                    <th>Spec ID</th>
-                    <th>Spec Data</th>
-                    <th>Spec Value</th>
-                    <th class="text-end">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var s in Model)
-                {
-                    <tr>
-                        <td>@s.SpecId</td>
-                        <td>@s.SpecData</td>
-                        <td>@s.SpecValue</td>
-                        <td class="text-end">
-                            <a asp-action="Edit"
-                               asp-route-itemCode="@s.ItemCode"
-                               asp-route-specId="@s.SpecId"
-                               class="btn btn-sm btn-outline-primary">
-                                Edit
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <!-- GRID -->
+        <div id="Grid"></div>
 
     </div>
 </div>
+
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
+<script>
+    var specData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+    var itemName = "@ViewBag.ItemName";
+
+    var grid = new ej.grids.Grid({
+        dataSource: specData,
+        height: 450,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            {
+                headerText: 'Item Name',
+                width: 200,
+                template: function () {
+                    return `<span style="font-weight:600">${itemName}</span>`;
+                }
+            },
+            { field: 'SpecId', headerText: 'Spec ID', width: 150 },
+            { field: 'SpecData', headerText: 'Spec Data', width: 200 },
+            { field: 'SpecValue', headerText: 'Spec Value', width: 200 },
+
+            {
+                headerText: 'Edit',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/Spec/Edit?itemCode=${data.ItemCode}&specId=${data.SpecId}"
+                               style="color:#2563eb;font-weight:600;text-decoration:none">
+                               Edit
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
+</script>

@@ -35,5 +35,10 @@ namespace ERPSystem.Services
         {
             await _dal.Delete(id);
         }
+
+        public async Task<string> GetNextSpecId()
+        {
+            return await _dal.GetNextSpecId();
+        }
     }
 }

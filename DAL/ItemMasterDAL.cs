@@ -31,9 +31,14 @@ namespace ERPSystem.DAL
             await _context.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task<ItemMaster?> GetById(string itemCode)
         {
-            var data = await _context.ItemMaster.FindAsync(id);
+            return await _context.ItemMaster.FindAsync(itemCode);
+        }
+
+        public async Task Delete(string itemCode)
+        {
+            var data = await _context.ItemMaster.FindAsync(itemCode);
             if (data != null)
             {
                 _context.ItemMaster.Remove(data);

@@ -9,8 +9,6 @@ namespace ERPSystem.DAL
             : base(options)
         {
         }
-
-        // Tables
         public DbSet<Login> Logins { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -22,16 +20,13 @@ namespace ERPSystem.DAL
         public DbSet<ItemData> ItemData { get; set; }
         public DbSet<BOM> BOM { get; set; }
         public DbSet<Spec> Spec { get; set; }
+        public DbSet<TransSpecDataModel> TransSpecData { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
-            // Composite Primary Key for tblSpec
             modelBuilder.Entity<Spec>()
                 .HasKey(s => new { s.ItemCode, s.SpecId });
-
-            // Optional: map table names (only if you used tbl names in MySQL)
             modelBuilder.Entity<Login>().ToTable("tblLogin");
             modelBuilder.Entity<Customer>().ToTable("tblCustomer");
             modelBuilder.Entity<Product>().ToTable("tblProduct");
@@ -43,6 +38,9 @@ namespace ERPSystem.DAL
             modelBuilder.Entity<ItemData>().ToTable("tblItemData");
             modelBuilder.Entity<BOM>().ToTable("tblBOM");
             modelBuilder.Entity<Spec>().ToTable("tblSpec");
+            modelBuilder.Entity<TransSpecDataModel>()
+                .HasKey(t => t.StockID);
+            modelBuilder.Entity<TransSpecDataModel>().ToTable("tblTransSpecData");
         }
     }
 }

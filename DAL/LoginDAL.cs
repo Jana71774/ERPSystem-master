@@ -13,11 +13,15 @@ namespace ERPSystem.DAL
             _context = context;
         }
 
-        public async Task<Login> ValidateUser(string loginId, string password)
+        public async Task<Login?> ValidateUser(string loginId, string password)
         {
             var user = await _context.Logins
-                .FirstOrDefaultAsync(x => x.LoginId == loginId && x.PasswordHash == password && x.IsActive);
-            return user ?? new Login();
+                .FirstOrDefaultAsync(x =>
+                    x.LoginId == loginId &&
+                    x.PasswordHash == password &&
+                    x.IsActive == true);
+
+            return user;   // ✔ return null if not found
         }
     }
 }

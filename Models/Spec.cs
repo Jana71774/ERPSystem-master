@@ -7,7 +7,9 @@ namespace ERPSystem.Models
     [Table("tblSpec")]
     public class Spec
     {
+        [Required]
         public string ItemCode { get; set; } = null!; 
+        [Required]
         public string SpecId { get; set; } = null!;
 
         public string? ItemName { get; set; }

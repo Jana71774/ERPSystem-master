@@ -1,5 +1,6 @@
 ﻿@model List<ERPSystem.Models.ItemMaster>
 <link rel="stylesheet" href="~/css/site.css" />
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet">
 
 <div class="main-content">
 
@@ -30,39 +31,48 @@
 
     <div class="card" style="margin-top:20px;padding:20px">
 
-        <table width="100%" cellpadding="12" cellspacing="0"
-               style="border-collapse:collapse">
+        <!-- GRID -->
+        <div id="Grid"></div>
 
-            <thead style="background:#f1f5f9">
-                <tr>
-                    <th>Item Code</th>
-                    <th>Item Name</th>
-                    <th>Type</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                @foreach (var i in Model)
-                {
-                    <tr style="border-bottom:1px solid #e5e7eb">
-                        <td>@i.ItemCode</td>
-                        <td style="font-weight:600">@i.ItemName</td>
-                        <td>@i.ItemType</td>
-                        <td>
-                            <a asp-action="Edit"
-                               asp-route-id="@i.ItemCode"
-                               style="color:#2563eb;font-weight:600;text-decoration:none;">
-                                Edit
-                            </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-
-        </table>
     </div>
 </div>
+
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
+<script>
+    var itemMasterData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    var grid = new ej.grids.Grid({
+        dataSource: itemMasterData,
+        height: 450,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            { field: 'ItemCode', headerText: 'Item Code', width: 160 },
+            { field: 'ItemName', headerText: 'Item Name', width: 220 },
+            { field: 'ItemType', headerText: 'Type', width: 160 },
+
+            {
+                headerText: 'Edit',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/ItemMaster/Edit/${data.ItemCode}"
+                               style="color:#2563eb;font-weight:600;text-decoration:none">
+                               Edit
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
+</script>
 
 <script>
     function goBack() {

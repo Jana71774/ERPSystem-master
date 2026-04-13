@@ -35,5 +35,10 @@ namespace ERPSystem.Services
         {
             await _dal.Delete(id);
         }
+
+        public async Task<Inventory?> GetByItemCode(string itemCode)
+        {
+            return await _dal.GetByItemCode(itemCode);
+        }
     }
 }

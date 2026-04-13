@@ -1,19 +1,26 @@
 ﻿@model ERPSystem.Models.PO
+
 <link rel="stylesheet" href="~/css/site.css" />
 
 <div class="main-content">
 
-    <div class="topbar">
+    <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
         <h3>➕ Create Purchase Order</h3>
-        <a asp-controller="PO" asp-action="Index"
-           style="text-decoration:none;color:#2a5298;font-weight:600;">
-            ← Back to PO List
-        </a>
+
+        <button type="button"
+                onclick="goBack();"
+                style="background:#e5e7eb;color:#111;
+                       padding:8px 14px;border-radius:6px;
+                       border:none;font-weight:600;cursor:pointer;">
+            ← Back
+        </button>
     </div>
 
     <div class="card" style="max-width:1100px;margin:auto;padding:30px">
 
         <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+            <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
             <!-- Header -->
             <div style="background:#f1f5f9;padding:15px;border-radius:8px;margin-bottom:25px">
@@ -24,54 +31,110 @@
             <!-- Form Grid -->
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
 
+                <!-- PO Number -->
                 <div>
-                    <label class="form-label">PO No</label>
-                    <input name="PONo" class="form-input" placeholder="Enter PO Number" />
+                    <label asp-for="PONo" class="form-label" readonly></label>
+                    <input asp-for="PONo" class="form-input" placeholder="Enter PO Number" readonly />
+                    <span asp-validation-for="PONo" class="text-danger"></span>
                 </div>
 
+                <!-- Customer Dropdown -->
                 <div>
-                    <label class="form-label">Customer ID</label>
-                    <input name="Customerid" class="form-input" placeholder="Enter Customer ID" />
+                    <label asp-for="Customerid" class="form-label">Customer</label>
+
+                    <select asp-for="Customerid"
+                            asp-items="ViewBag.Customers"
+                            class="form-input"
+                            required>
+                        <option value="">-- Select Customer --</option>
+                    </select>
+
+                    <span asp-validation-for="Customerid" class="text-danger"></span>
                 </div>
 
+                <!-- Quantity -->
                 <div>
-                    <label class="form-label">Quantity</label>
-                    <input type="number" name="qty" class="form-input" />
+                    <label asp-for="qty" class="form-label">Quantity</label>
+                    <input asp-for="qty"
+                           type="number"
+                           min="1"
+                           class="form-input"
+                           required />
+                    <span asp-validation-for="qty" class="text-danger"></span>
                 </div>
 
+                <!-- Product Dropdown -->
                 <div>
-                    <label class="form-label">Product ID</label>
-                    <input name="productid" class="form-input" placeholder="Enter Product ID" />
+                    <label asp-for="productid" class="form-label">Product</label>
+
+                    <select asp-for="productid"
+                            asp-items="ViewBag.Products"
+                            class="form-input"
+                            required>
+                        <option value="">-- Select Product --</option>
+                    </select>
+
+                    <span asp-validation-for="productid" class="text-danger"></span>
                 </div>
 
+                <!-- Licence Type Dropdown -->
                 <div>
-                    <label class="form-label">Licence Type</label>
-                    <input name="LicenceType" class="form-input" placeholder="Licence Type" />
+                    <label asp-for="LicenceType" class="form-label">Licence Type</label>
+
+                    <select asp-for="LicenceType" class="form-input">
+                        <option value="">-- Select Licence Type --</option>
+                        <option>Standard</option>
+                        <option>Premium</option>
+                    </select>
                 </div>
 
+                <!-- Sale Type Dropdown -->
                 <div>
-                    <label class="form-label">Sale Type</label>
-                    <input name="Saletype" class="form-input" placeholder="Sale Type" />
+                    <label asp-for="Saletype" class="form-label">Sale Type</label>
+
+                    <select asp-for="Saletype" class="form-input">
+                        <option value="">-- Select Sale Type --</option>
+                        <option>Dealer</option>
+                        <option>Direct</option>
+                        <option>Online</option>
+                    </select>
                 </div>
 
+                <!-- Salesperson Dropdown -->
                 <div>
-                    <label class="form-label">Salesperson</label>
-                    <input name="Salesperson" class="form-input" placeholder="Salesperson" />
+                    <label asp-for="Salesperson" class="form-label">Salesperson</label>
+
+                    <select asp-for="Salesperson"
+                            asp-items="ViewBag.Salespersons"
+                            class="form-input">
+                        <option value="">-- Select Salesperson --</option>
+                    </select>
+                </div>
+                <!-- Warranty -->
+                <div>
+                    <label asp-for="WarrantyYEAR" class="form-label">Warranty (Years)</label>
+                    <input asp-for="WarrantyYEAR"
+                           type="number"
+                           min="0"
+                           max="10"
+                           class="form-input" />
                 </div>
 
+                <!-- Attachment -->
                 <div>
-                    <label class="form-label">Warranty (YEAR)</label>
-                    <input type="number" name="WarrantyYEAR" class="form-input" />
+                    <label class="form-label">Attachment (PDF)</label>
+                    <input type="file"
+                           name="AttachmentFile"
+                           accept=".pdf"
+                           class="form-input" />
                 </div>
 
-                <div>
-                    <label class="form-label">Attachment</label>
-                    <input type="file" name="AttachmentFile" class="form-input" />
-                </div>
-
+                <!-- Description -->
                 <div style="grid-column:1/4">
-                    <label class="form-label">Description</label>
-                    <textarea name="Description" class="form-input" rows="3"
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description"
+                              class="form-input"
+                              rows="3"
                               placeholder="PO Description"></textarea>
                 </div>
 
@@ -80,11 +143,12 @@
             <!-- Buttons -->
             <div style="margin-top:30px;display:flex;justify-content:flex-end;gap:15px">
 
-                <a asp-controller="PO" asp-action="Index"
-                   style="background:#e5e7eb;color:#111;padding:10px 18px;border-radius:6px;
-                          text-decoration:none;font-weight:600;">
+                <button type="button"
+                        onclick="goBack();"
+                        style="background:#e5e7eb;color:#111;padding:10px 18px;border-radius:6px;
+                               border:none;font-weight:600;cursor:pointer;">
                     Cancel
-                </a>
+                </button>
 
                 <button type="submit"
                         style="background:#2a5298;color:white;padding:12px 24px;border-radius:8px;
@@ -96,8 +160,20 @@
 
         </form>
 
+        @await Html.PartialAsync("_ValidationScriptsPartial")
+
     </div>
 </div>
+
+<script>
+    function goBack() {
+        if (document.referrer && document.referrer !== window.location.href) {
+            window.history.back();
+        } else {
+            window.location.href = '/PO/Index';
+        }
+    }
+</script>
 
 <style>
     .form-label {
@@ -117,8 +193,8 @@
         font-size: 14px;
     }
 
-        .form-input:focus {
-            border-color: #2a5298;
-            box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
-        }
+    .form-input:focus {
+        border-color: #2a5298;
+        box-shadow: 0 0 0 2px rgba(42,82,152,0.15);
+    }
 </style>

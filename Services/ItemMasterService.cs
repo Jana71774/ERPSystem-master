@@ -31,9 +31,14 @@ namespace ERPSystem.Services
             await _dal.Update(model);
         }
 
-        public async Task Delete(int id)
+public async Task<ItemMaster?> GetById(string itemCode)
         {
-            await _dal.Delete(id);
+            return await _dal.GetById(itemCode);
+        }
+
+        public async Task Delete(string itemCode)
+        {
+            await _dal.Delete(itemCode);
         }
     }
 }

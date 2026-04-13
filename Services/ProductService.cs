@@ -21,7 +21,7 @@ namespace ERPSystem.Services
 
         public async Task<Product> GetById(string id)
         {
-            return await _dal.GetById(id);
+            return await _dal.GetById(id) ?? throw new KeyNotFoundException($"Product with ID '{id}' not found.");
         }
 
         public async Task Insert(Product model)

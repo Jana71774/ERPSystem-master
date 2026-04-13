@@ -19,9 +19,9 @@ namespace ERPSystem.DAL
             return await _context.Products.ToListAsync();
         }
 
-        public async Task<Product> GetById(string id)
+        public async Task<Product?> GetById(string id)
         {
-            return await _context.Products.FindAsync(id) ?? throw new InvalidOperationException("Product not found");
+            return await _context.Products.FindAsync(id);
         }
 
         public async Task Insert(Product model)

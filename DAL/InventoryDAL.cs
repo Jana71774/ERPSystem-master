@@ -40,5 +40,10 @@ namespace ERPSystem.DAL
                 await _context.SaveChangesAsync();
             }
         }
+
+        public async Task<Inventory?> GetByItemCode(string itemCode)
+        {
+            return await _context.Inventory.FirstOrDefaultAsync(i => i.ItemCode == itemCode);
+        }
     }
 }

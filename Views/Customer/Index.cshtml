@@ -1,6 +1,9 @@
 ﻿@model List<ERPSystem.Models.Customer>
 <link rel="stylesheet" href="~/css/site.css" />
 
+<!-- Syncfusion CSS -->
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet" />
+
 <div class="main-content">
 
     <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
@@ -8,7 +11,6 @@
 
         <div style="display:flex;gap:12px;align-items:center">
 
-            <!-- 🔙 BACK (PREVIOUS PAGE) -->
             <button type="button"
                     onclick="goBack();"
                     style="background:#e5e7eb;color:#111;
@@ -17,7 +19,6 @@
                 ← Back
             </button>
 
-            <!-- ➕ ADD CUSTOMER -->
             <a asp-controller="Customer" asp-action="Create"
                style="background:#2a5298;color:white;
                       padding:10px 15px;border-radius:6px;
@@ -30,44 +31,55 @@
 
     <div class="card">
 
-        <table width="100%" cellpadding="12">
-            <tr style="background:#f1f5f9">
-                <th>ID</th>
-                <th>Contact Person</th>
-                <th>Region</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Action</th>
-            </tr>
-
-            @foreach (var c in Model)
-            {
-                <tr>
-                    <td>@c.CustomerID</td>
-                    <td>@c.ContactPerson</td>
-                    <td>@c.Region</td>
-                    <td>@c.Email</td>
-                    <td>@c.PhoneNo</td>
-                    <td>
-                        <a asp-controller="Customer"
-                           asp-action="Edit"
-                           asp-route-id="@c.CustomerID">
-                            Edit
-                        </a>
-                    </td>
-                </tr>
-            }
-        </table>
+        <div id="Grid"></div>
 
     </div>
 </div>
 
+<!-- Syncfusion Scripts -->
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
 <script>
+    var customerData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    var grid = new ej.grids.Grid({
+        dataSource: customerData,
+        height: 400,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            { field: 'CustomerID', headerText: 'ID', width: 100, textAlign: 'Center' },
+            { field: 'ContactPerson', headerText: 'Contact Person', width: 180 },
+            { field: 'Region', headerText: 'Region', width: 150 },
+            { field: 'Email', headerText: 'Email', width: 220 },
+            { field: 'PhoneNo', headerText: 'Phone', width: 150 },
+
+            {
+                headerText: 'Action',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/Customer/Edit/${data.CustomerID}" 
+                               style="color:#2563eb;font-weight:600;">
+                               Edit
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
+
+
     function goBack() {
         if (document.referrer && document.referrer !== window.location.href) {
             window.history.back();
         } else {
-            // 🔁 safe fallback
             window.location.href = '/';
         }
     }

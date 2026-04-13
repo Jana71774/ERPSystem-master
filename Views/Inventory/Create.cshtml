@@ -30,8 +30,9 @@
             <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:22px">
 
                 <div>
-                    <label class="form-label">Item Code</label>
-                    <input name="ItemCode" class="form-input" required />
+<label class="form-label">Item Code <small style="color:#9ca3af">(Select from list or type)</small></label>
+                    <input list="itemCodeList" name="ItemCode" id="itemCodeInput" class="form-input" required placeholder="Type or select ItemCode..." autocomplete="off" />
+                    <datalist id="itemCodeList
                 </div>
 
                 <div>
@@ -95,6 +96,48 @@
         } else {
             window.location.href = '/Inventory/Index';
         }
+    }
+
+// Native datalist auto-complete with AJAX load
+    $(document).ready(function() {
+        loadItemData();
+
+        $('#itemCodeInput').on('input change', function() {
+            var value = $(this).val().trim();
+            if (value) {
+                $.get('/Inventory/GetItemData?term=' + encodeURIComponent(value))
+                    .done(function(data) {
+                        if (data && data.length > 0) {
+                            var item = data[0]; // First match
+                            $('#itemInfo').html('Found: ' + item.itemName + (item.itemDataValue ? ' | ' + item.itemDataValue : ''));
+                        } else {
+                            $('#itemInfo').html('No item found - add via ItemData first');
+                        }
+                    })
+                    .fail(function() {
+                        $('#itemInfo').html('Error loading item info');
+                    });
+            } else {
+                $('#itemInfo').empty();
+            }
+        });
+    });
+
+    function loadItemData() {
+        $.get('/Inventory/GetItemData')
+            .done(function(data) {
+                var datalist = $('#itemCodeList');
+                datalist.empty();
+                data.forEach(function(item) {
+                    datalist.append('<option value="' + item.id + '">' + item.text + '</option>');
+                });
+                if (data.length === 0) {
+                    $('#itemInfo').html('<span style="color:orange">No items in database. <a href="/ItemData/Create" target="_blank">Create ItemData first</a></span>');
+                }
+            })
+            .fail(function() {
+                $('#itemInfo').html('Error loading items. Check console.');
+            });
     }
 </script>
 

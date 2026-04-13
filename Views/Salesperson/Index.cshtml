@@ -1,5 +1,10 @@
 ﻿@model List<ERPSystem.Models.Salesperson>
 
+<link rel="stylesheet" href="~/css/site.css" />
+
+<!-- Syncfusion CSS -->
+<link href="https://cdn.syncfusion.com/ej2/25.1.35/material.css" rel="stylesheet" />
+
 <div class="main-content">
 
     <div class="topbar" style="display:flex;justify-content:space-between;align-items:center">
@@ -7,7 +12,6 @@
 
         <div style="display:flex;gap:12px;align-items:center">
 
-            <!-- 🔙 BACK (PREVIOUS PAGE) -->
             <button type="button"
                     onclick="goBack();"
                     style="background:#e5e7eb;color:#111;
@@ -16,7 +20,6 @@
                 ← Back
             </button>
 
-            <!-- ➕ ADD SALESPERSON -->
             <a asp-controller="Salesperson"
                asp-action="Create"
                style="background:#2a5298;color:white;
@@ -28,41 +31,57 @@
         </div>
     </div>
 
-    <table width="100%" cellpadding="12">
-        <tr style="background:#f1f5f9">
-            <th>Emp ID</th>
-            <th>Name</th>
-            <th>Region</th>
-            <th>Target</th>
-            <th>Action</th>
-        </tr>
+    <div class="card" style="margin-top:15px;padding:20px">
 
-        @foreach (var s in Model)
-        {
-            <tr>
-                <td>@s.EmpID</td>
-                <td>@s.Name</td>
-                <td>@s.Region</td>
-                <td>@s.Target</td>
-                <td>
-                    <a asp-controller="Salesperson"
-                       asp-action="Edit"
-                       asp-route-id="@s.EmpID">
-                        Edit
-                    </a>
-                </td>
-            </tr>
-        }
-    </table>
+        <div id="Grid"></div>
+
+    </div>
 
 </div>
 
+<!-- Syncfusion JS -->
+<script src="https://cdn.syncfusion.com/ej2/25.1.35/dist/ej2.min.js"></script>
+
 <script>
+    var salesData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model));
+
+    var grid = new ej.grids.Grid({
+        dataSource: salesData,
+        height: 420,
+
+        allowPaging: true,
+        allowSorting: true,
+        allowFiltering: true,
+        allowSearching: true,
+
+        toolbar: ['Search'],
+
+        columns: [
+            { field: 'EmpID', headerText: 'Emp ID', width: 120, textAlign: 'Center' },
+            { field: 'Name', headerText: 'Name', width: 180 },
+            { field: 'Region', headerText: 'Region', width: 160 },
+            { field: 'Target', headerText: 'Target', width: 140, textAlign: 'Right' },
+
+            {
+                headerText: 'Action',
+                width: 120,
+                template: function (data) {
+                    return `<a href="/Salesperson/Edit/${data.EmpID}"
+                               style="color:#2563eb;font-weight:600;text-decoration:none;">
+                               Edit
+                            </a>`;
+                }
+            }
+        ]
+    });
+
+    grid.appendTo('#Grid');
+
+
     function goBack() {
         if (document.referrer && document.referrer !== window.location.href) {
             window.history.back();
         } else {
-            // 🔁 safe fallback
             window.location.href = '/';
         }
     }

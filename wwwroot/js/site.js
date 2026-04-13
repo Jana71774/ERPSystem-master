@@ -1,4 +1,6 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿// ERP System JavaScript
+// Load jQuery if not loaded (for partial views)
+if (typeof $ === 'undefined') {
+    document.write('<script src="~/lib/jquery/jquery.min.js"><\/script>');
+}
 
-// Write your JavaScript code.
